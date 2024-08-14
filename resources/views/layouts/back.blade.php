@@ -16,9 +16,13 @@
    <link rel="stylesheet" href="{{ asset('assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
    <link rel="stylesheet" href="{{ asset('assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/izitoast/css/iziToast.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/datatables.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}">
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css')}}">
   <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css')}}">
+
     @stack('styles')
 </head>
 
@@ -38,7 +42,7 @@
       </div>
 
   </div>
-
+  @stack('modals')
   <!-- General JS Scripts -->
   <script src="{{ asset('backend/assets/modules/jquery.min.js')}}"></script>
   <script src="{{ asset('backend/assets/modules/popper.js')}}"></script>
@@ -57,11 +61,17 @@
   <script src="{{ asset('backend/assets/modules/chocolat/dist/js/jquery.chocolat.min.js')}}"></script>
   <script src="{{ asset('backend/assets/modules/izitoast/js/iziToast.min.js') }}"></script>
 
+  <script src="{{ asset('backend/assets/modules/datatables/datatables.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js') }}"></script>
+  <script src="{{ asset('backend/assets/modules/jquery-ui/jquery-ui.min.js') }}"></script>
   <!-- Page Specific JS File -->
 
   <!-- Template JS File -->
   <script src="{{ asset('backend/assets/js/scripts.js')}}"></script>
   <script src="{{ asset('backend/assets/js/custom.js')}}"></script>
+
+
   @include('notification.toast')
    <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
    <script>

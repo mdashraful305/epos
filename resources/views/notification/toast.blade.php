@@ -3,7 +3,6 @@
     iziToast.success({
         title: 'Success',
         timeout: 2000,
-        overlay: true,
         message: '{{ session('success') }}',
         position: 'topRight'
 
@@ -13,7 +12,6 @@
     iziToast.error({
         title: 'Error',
         timeout: 2000,
-        overlay: true,
         message: '{{ session('error') }}',
         position: 'topRight'
 
@@ -23,7 +21,6 @@
     iziToast.warning({
         title: 'Warning',
         timeout: 2000,
-        overlay: true,
         message: '{{ session('warning') }}',
         position: 'topRight'
 
@@ -33,7 +30,6 @@
     iziToast.info({
         title: 'Info',
         timeout: 2000,
-        overlay: true,
         message: '{{ session('info') }}',
         position: 'topRight'
 
