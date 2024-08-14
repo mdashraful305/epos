@@ -43,6 +43,9 @@ Route::group(['namespace' => 'App\Http\Controllers','middleware' => ['auth', 'pe
         'roles' => Con\RoleController::class,
         'users' => Con\UserController::class,
         'permissions'=>Con\PermissionController::class,
+        'stores'=>Con\StoreController::class,
+        'categories'=>Con\CategoryController::class,
+        'products'=>Con\ProductController::class,
     ]);
 
 
