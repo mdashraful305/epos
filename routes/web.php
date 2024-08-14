@@ -51,5 +51,5 @@ Route::group(['namespace' => 'App\Http\Controllers','middleware' => ['auth', 'pe
         'products'=>Con\ProductController::class,
     ]);
 
-
+    Route::delete('categories/destroy/{id}', [Con\CategoryController::class, 'destroy'])->name('categories.destroy');
 });

@@ -13,4 +13,10 @@ function routeName($string){
     return $string;
 }
 
+function slug($string){
+    $slug = Str::slug($string);
+    $slug.= '-'.Str::random(5);
+    return $slug;
+}
+
 
