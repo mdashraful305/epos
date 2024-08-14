@@ -2,7 +2,7 @@
      @if (session('success'))
     iziToast.success({
         title: 'Success',
-        timeout: 2000,
+        timeout: 1500,
         message: '{{ session('success') }}',
         position: 'topRight'
 
@@ -11,7 +11,7 @@
 @if (session('error'))
     iziToast.error({
         title: 'Error',
-        timeout: 2000,
+        timeout: 1500,
         message: '{{ session('error') }}',
         position: 'topRight'
 
@@ -20,7 +20,7 @@
 @if (session('warning'))
     iziToast.warning({
         title: 'Warning',
-        timeout: 2000,
+        timeout: 1500,
         message: '{{ session('warning') }}',
         position: 'topRight'
 
@@ -29,7 +29,7 @@
 @if (session('info'))
     iziToast.info({
         title: 'Info',
-        timeout: 2000,
+        timeout: 1500,
         message: '{{ session('info') }}',
         position: 'topRight'
 
