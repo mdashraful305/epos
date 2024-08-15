@@ -51,5 +51,7 @@ Route::group(['namespace' => 'App\Http\Controllers','middleware' => ['auth', 'pe
         'products'=>Con\ProductController::class,
     ]);
 
+    Route::get('categories/edit/{id}', [Con\CategoryController::class, 'edit'])->name('categories.edit');
+    Route::post('categories/update/{id}', [Con\CategoryController::class, 'update'])->name('categories.update');
     Route::delete('categories/destroy/{id}', [Con\CategoryController::class, 'destroy'])->name('categories.destroy');
 });

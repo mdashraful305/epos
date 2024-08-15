@@ -16,7 +16,7 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            if(auth()->user()->hasRole(['Shop Owner']))
+            if(auth()->user()->hasRole('Shop Owner'))
                 $data = Category::where('store_id',auth()->user()->store_id)->get();
             else
                 $data=null;
@@ -26,13 +26,13 @@ class CategoryController extends Controller
                     ->addColumn('action', function($row){
 
                         $btn = '<div class="d-flex">';
-                        $btn .= '<a href="'.route("categories.edit",$row['id']).'" class="btn btn-primary btn-sm mr-2"><i class="bi bi-pencil-square"></i> Edit</a>';
-                        $btn .= '<button class="btn btn-danger btn-sm delete" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="bi bi-trash"></i> Delete</button>';
+                        $btn .= '<button class="btn btn-primary btn edit mr-2" data-id="'.$row['id'].'"  onclick="edit('.$row['id'].')"><i class="fa-solid fa-pencil"></i></button>';
+                        $btn .= '<button class="btn btn-danger btn delete" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="fa-solid fa-trash"></i></button>';
                         $btn .= '</div>';
                         return $btn;
                     })
                     ->addColumn('image', function($data) {
-                        return '<img src="'.asset('images/category/'.$data->image).'" width="70px"/>';
+                        return '<img src="'.asset('images/category/'.$data->image).'" width="60px"/>';
                      })
                     ->rawColumns(['action','image'])
                     ->make(true);
@@ -73,12 +73,13 @@ class CategoryController extends Controller
             if ($request->hasFile('image')) {
                 $image_name = auth()->user()->store_id.time() . '.' . $request->image->extension();
                 $request->image->move($path, $image_name);
+                $image_path = $path.'/'.$image_name;
             }
         //store category
         $category=Category::create([
             'name'=>$request->name,
             'slug'=>slug($request->name),
-            'image'=>$image_name,
+            'image'=>$image_path,
             'store_id'=>auth()->user()->store_id
         ]);
 
@@ -100,17 +101,56 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $category=Category::find($id);
+        return response()->json(['status'=>true,'data'=>$category]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(Request $request, $id)
     {
-        //
+        //validate request
+        $validator=Validator::make($request->all(),[
+            'name'=>'required',
+            'image'=>'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        //store image
+        try{
+            $category=Category::find($id);
+            $path = public_path().'/images/category';
+            if ($request->hasFile('image')) {
+                $old_image = $category->image;
+                if(file_exists($old_image)){
+                    unlink($old_image);
+                }
+                $image_name = auth()->user()->store_id.time() . '.' . $request->image->extension();
+                $request->image->move($path, $image_name);
+                $image_path = $path.'/'.$image_name;
+            }else{
+                $image_path=$category->image;
+            }
+        //store category
+        $category->update([
+            'name'=>$request->name,
+            'slug'=>slug($request->name),
+            'image'=>$image_path,
+            'store_id'=>auth()->user()->store_id
+        ]);
+
+            return response()->json(['status'=>true,'message'=>'Category updated successfully']);
+        }catch(\Exception $e){
+            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        }
     }
 
     /**
@@ -119,6 +159,10 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category=Category::find($id);
+        $path = $category->image;
+        if(file_exists($path)){
+            unlink($path);
+        }
         $category->delete();
         return response()->json(['status'=>true,'message'=>'Category deleted successfully']);
     }
