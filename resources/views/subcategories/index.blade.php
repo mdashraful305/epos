@@ -18,7 +18,7 @@
                   <h4>Subcategories List</h4>
                   <div class="card-header-form">
                     @can('create-subcategorie')
-                        <a href="javascript:void(0)" class="btn btn-success btn-sm my-2" data-toggle="modal" data-target="#modelId"><i class="bi bi-plus-circle"></i> Add New Subcategory</a>
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm my-2" data-toggle="modal" data-target="#modelId"><i class="bi bi-plus-circle"></i> +Add New Subcategory</a>
                     @endcan
                   </div>
                 </div>
@@ -124,7 +124,7 @@
         }
         reader.readAsDataURL(file);
     });
-    
+
         $('#modelId').on('hidden.bs.modal', function () {
             $('#subcate-add')[0].reset();
             $('#preview').attr('src', '');

@@ -18,7 +18,7 @@
                   <h4>Categories List</h4>
                   <div class="card-header-form">
                     @can('create-categorie')
-                        <a href="javascript:void(0)" class="btn btn-success btn-sm my-2" data-toggle="modal" data-target="#modelId"><i class="bi bi-plus-circle"></i> Add New Category</a>
+                        <a href="javascript:void(0)" class="btn btn-success btn-sm my-2" data-toggle="modal" data-target="#modelId"><i class="bi bi-plus-circle"></i> +Add New Category</a>
                     @endcan
                   </div>
                 </div>
