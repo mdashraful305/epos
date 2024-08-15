@@ -32,7 +32,7 @@ class CategoryController extends Controller
                         return $btn;
                     })
                     ->addColumn('image', function($data) {
-                        return '<img src="'.asset('images/category/'.$data->image).'" width="60px"/>';
+                        return '<img src="'.asset($data->image).'" width="60px"/>';
                      })
                     ->rawColumns(['action','image'])
                     ->make(true);
@@ -69,10 +69,10 @@ class CategoryController extends Controller
 
         //store image
         try{
-            $path = public_path().'/images/category';
+            $path ='/images/category';
             if ($request->hasFile('image')) {
                 $image_name = auth()->user()->store_id.time() . '.' . $request->image->extension();
-                $request->image->move($path, $image_name);
+                $request->image->move(public_path().$path, $image_name);
                 $image_path = $path.'/'.$image_name;
             }
         //store category
@@ -127,14 +127,14 @@ class CategoryController extends Controller
         //store image
         try{
             $category=Category::find($id);
-            $path = public_path().'/images/category';
+            $path ='/images/category';
             if ($request->hasFile('image')) {
                 $old_image = $category->image;
                 if(file_exists($old_image)){
                     unlink($old_image);
                 }
                 $image_name = auth()->user()->store_id.time() . '.' . $request->image->extension();
-                $request->image->move($path, $image_name);
+                $request->image->move(public_path().$path, $image_name);
                 $image_path = $path.'/'.$image_name;
             }else{
                 $image_path=$category->image;

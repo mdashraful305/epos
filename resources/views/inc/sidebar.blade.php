@@ -27,6 +27,18 @@
                 </li>
             @endcan
 
+            @can(['index-subcategorie'])
+            <li class="menu-header">SubCategory Management</li>
+            <li class="dropdown {{Route::is('subcategories.*') ? 'active' : '' }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-cubes"></i> <span>SubCategory</span></a>
+            <ul class="dropdown-menu">
+                @can('index-categorie')
+                <li class="{{ Route::is('subcategories.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('subcategories.index') }}">Category List</a></li>
+                @endcan
+            </ul>
+            </li>
+            @endcan
+
             @can(['index-categorie'])
                 <li class="menu-header">Product Management</li>
                 <li class="dropdown {{Route::is('products.*') ? 'active' : '' }}">
