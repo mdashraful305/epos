@@ -31,6 +31,10 @@ Route::get('/clear', function() {
 
     return redirect()->back()->withSuccess('Cache cleared successfully.');
 })->name('clear');
+
+Route::get('/pos',function(){
+    return view('pos.index');
+})->name('pos');
 Route::get('/route', function() {
     Artisan::call('permission:create-permission-routes');
     return redirect()->back()->withSuccess('Cache cleared successfully.');
