@@ -13,6 +13,7 @@
         </div> --}}
       </div>
     </form>
+    <a href="{{ route('pos') }}" class="btn btn-outline-danger text-white mr-2">Pos</a>
     <a href="{{ route('clear') }}" class="btn btn-outline-danger text-white mr-1">Cache Clear</a>
     <a href="{{ route('route') }}" class="btn btn-outline-danger text-white">Generate Route</a>
     <ul class="navbar-nav navbar-right">

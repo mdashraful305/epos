@@ -32,7 +32,7 @@ Route::get('/clear', function () {
 
     return redirect()->back()->withSuccess('Cache cleared successfully.');
 })->name('clear');
-Route::get('/route', function () {
+Route::get('/route', function() {
     Artisan::call('permission:create-permission-routes');
     return redirect()->back()->withSuccess('Cache cleared successfully.');
 })->name('route');
