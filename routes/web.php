@@ -79,5 +79,11 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
     Route::delete('customers/destroy/{id}', [Con\CustomerController::class, 'destroy'])->name('customers.destroy');
 
 
+    //pos
+    Route::get('pos',function(){
+        return view('pos.index');
+      });
+
+
 
 });
