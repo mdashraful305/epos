@@ -70,5 +70,14 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
 
 
 
+    //customer
+    Route::get('customers', [Con\CustomerController::class, 'index'])->name('customers.index');
+    Route::get('customers/create', [Con\CustomerController::class, 'create'])->name('customers.create');
+    Route::post('customers/store', [Con\CustomerController::class, 'store'])->name('customers.store');
+    Route::get('customers/edit/{id}', [Con\CustomerController::class, 'edit'])->name('customers.edit');
+    Route::post('customers/update/{id}', [Con\CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('customers/destroy/{id}', [Con\CustomerController::class, 'destroy'])->name('customers.destroy');
+
+
 
 });
