@@ -117,10 +117,16 @@
             }
             reader.readAsDataURL(file);
         });
-
+        $('#modelId').on('hidden.bs.modal', function () {
+            $('#cate-add')[0].reset();
+            $('#preview').attr('src', '');
+            $('.image-preview').hide();
+            $('#modelId').find('.modal-title').text('Create Category');
+            $('#submit').text('Submit');
+            $('#cate-add').attr('action', '{{ route('categories.store') }}');
+        });
         $("#cate-add").on('submit', function(e){
             e.preventDefault();
-
             var formData = new FormData(this);
             $.ajax({
                url: $(this).attr('action'),
@@ -131,47 +137,25 @@
                 processData: false,
                 success: function(data){
                     if(data.status){
-                        iziToast.success({
-                            title: 'Success',
-                            timeout: 2000,
-                            message: data.message,
-                            position: 'topRight'
-
-                        });
+                        iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
                         $('#modelId').modal('hide');
                         table.draw();
                         $('#cate-add')[0].reset();
                     }else{
-                        iziToast.error({
-                            title: 'Error',
-                            timeout: 2000,
-                            message: data.message,
-                            position: 'topRight'
+                        iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
 
-                        });
                     }
                 },
                 error: function(err){
+                    console.log(err.responseJSON);
                     if (err.status === 422) {
                         var errors = err.responseJSON.errors;
                         // Display errors to the user
                         $.each(errors, function(key, value) {
-                            iziToast.error({
-                                title: 'Error',
-                                timeout: 2000,
-                                message: value,
-                                position: 'topRight'
-
-                            });
+                            iziToast.error({title: 'Error',timeout: 1500,message:value,position: 'topRight'});
                         });
                     }else{
-                        iziToast.error({
-                            title: 'Error',
-                            timeout: 2000,
-                            message: 'Something went wrong. Please try again later',
-                            position: 'topRight'
-
-                        });
+                        iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
                     }
                 }
             });
@@ -180,7 +164,6 @@
 
     });
     function checkDelete(id) {
-
         var id =id;
         var token = $("meta[name='csrf-token']").attr("content");
         var url="{{ url('/') }}"+'/categories/destroy/'+id;
@@ -202,19 +185,45 @@
                     },
                     success: function (data) {
                         if(data.status){
-                            iziToast.success(data.message);
+                            iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
                             $('#data-table').DataTable().ajax.reload();
                         }else{
-                            iziToast.error(data.message);
+                            iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
                         }
                     },
                     error: function(err){
-                        iziToast.error('Something went wrong. Please try again later');
+                        iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
                     }
                 });
             }
         });
        };
+
+       function edit(id) {
+        var id =id;
+        var url="{{ url('/') }}"+'/categories/edit/'+id;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                if(data.status){
+                    $('#modelId').modal('show');
+                    $('#modelId').find('.modal-title').text('Update Category');
+                    $('#cate-add').attr('action', '{{ url('/') }}/categories/update/'+id);
+                    $('#name').val(data.data.name);
+                    $('#preview').attr('src', '{{ url('/') }}//images/category/'+data.data.image);
+                    $('.image-preview').show();
+                    $('#submit').text('Update');
+                }else{
+                    iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
+                }
+            },
+            error: function(err){
+                console.log(err);
+                iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
+            }
+        });
+       }
   </script>
 @endpush
 
