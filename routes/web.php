@@ -4,6 +4,7 @@ use App\Http\Controllers as Con;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SubCategoryController;
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,7 @@ Route::get('/clear', function () {
 
     return redirect()->back()->withSuccess('Cache cleared successfully.');
 })->name('clear');
-Route::get('/route', function() {
+Route::get('/route', function () {
     Artisan::call('permission:create-permission-routes');
     return redirect()->back()->withSuccess('Cache cleared successfully.');
 })->name('route');
@@ -59,7 +60,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
 
 
     //subcatagory
-    Route::prefix('subcategories')->group(function() {
+    Route::prefix('subcategories')->group(function () {
         Route::get('/', [SubCategoryController::class, 'index'])->name('subcategories.index');
         Route::get('create', [SubCategoryController::class, 'create'])->name('subcategories.create');
         Route::post('store', [SubCategoryController::class, 'store'])->name('subcategories.store');
@@ -80,10 +81,18 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
 
 
     //pos
-    Route::get('pos',function(){
+    Route::get('pos', function () {
         return view('pos.index');
-      })->name('pos');
+    })->name('pos');
 
 
-
+    //product
+    Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('products/create', [ProductController::class, 'create'])->name('products.create');
+    Route::post('products/store', [ProductController::class, 'store'])->name('products.store');
+    Route::get('products/edit/{id}', [ProductController::class, 'edit'])->name('products.edit');
+    Route::post('products/update/{id}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('products/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('products/{id}/details', [ProductController::class, 'details'])->name('products.details');
+    Route::post('products/{id}/activate', [ProductController::class, 'activate'])->name('products.activate');
 });
