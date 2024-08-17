@@ -82,7 +82,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
     //pos
     Route::get('pos',function(){
         return view('pos.index');
-      });
+      })->name('pos');
 
 
 
