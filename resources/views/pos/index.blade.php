@@ -25,17 +25,20 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                  <select class="form-control" name="" id="">
-                                    <option>All Categories</option>
-                                  </select>
+                                    <select class="form-control" name="category_id" id="category_id">
+                                        <option value="">Select Category</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <select class="form-control" name="" id="">
-                                      <option>All Sub Categories</option>
+                                    <select class="form-control select2" name="subcategory_id" id="subcategory_id" disabled>
+                                        <option value="">Select Category First</option>
                                     </select>
-                                  </div>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -69,15 +72,16 @@
 
             <div class="">
                 <img class="card-img-top" src="holder.js/100x180/" alt="">
-
+                @can('create-customer')
                 <div class="input-group">
                     <select class="custom-select" id="inputGroupSelect04">
-                    <option value="1">Walk in Customer</option>
+                        <option value="1">Walk in Customer</option>
                     </select>
                     <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-user-plus"></i></button>
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#modelId"><i class="fa-solid fa-user-plus"></i></button>
                     </div>
                 </div>
+            @endcan
                 @for ($i = 0; $i < 2; $i++)
                     <div class="selected-product-column">
                             <div class="row product-cart">
@@ -150,6 +154,48 @@
 
 
 @endsection
+@push('modals')
+   <!-- Modal -->
+   <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Customer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <form action="{{ route('customers.store') }}" method="POST" id="customer-add">
+            <div class="modal-body">
+                    @csrf
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" name="name" id="name" placeholder="Enter Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter Phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" class="form-control" name="address" id="address" placeholder="Enter Address">
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+@endpush
+
 @push('scripts')
     <script>
         function calculateTotal(){
@@ -179,5 +225,101 @@
 
             $('.selected-product-column').html('');
         });
+
+
+
+        $(document).ready(function() {
+        var clickCounter = 0;
+        var maxClicks = 3; // Number of clicks to show the modal
+        var modalShown = false;
+
+        $('#customer-button').on('click', function() {
+            if (!modalShown) {
+                clickCounter++;
+                if (clickCounter >= maxClicks) {
+                    $('#modelId').modal('show');
+                    clickCounter = 0; // Reset counter after showing the modal
+                }
+            }
+        });
+
+        $('#modelId').on('hidden.bs.modal', function () {
+            $('#customer-add')[0].reset();
+            $('#modelId').find('.modal-title').text('Create Customer');
+            $('#submit').text('Submit');
+            $('#customer-add').attr('action', '{{ route('customers.store') }}');
+        });
+
+        $("#customer-add").on('submit', function(e){
+            e.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+               url: $(this).attr('action'),
+               method: $(this).attr('method'),
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    if(data.status){
+                        iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
+                        $('#modelId').modal('hide');
+                        $('#data-table').DataTable().ajax.reload();
+                        $('#customer-add')[0].reset();
+                        modalShown = true; // Prevent modal from showing again
+                    }else{
+                        iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
+                    }
+                },
+                error: function(err){
+                    console.log(err.responseJSON);
+                    if (err.status === 422) {
+                        // Handle validation errors
+                    }else{
+                        iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
+                    }
+                }
+            });
+        });
+    });
+
+
+    $(document).ready(function() {
+        $('#category_id').change(function() {
+            var category_id = $(this).val();
+            if (category_id) {
+                $.ajax({
+                    url: "{{ route('products.subcategories') }}",
+                    type: "POST",
+                    data: {
+                        category_id: category_id,
+                        _token: "{{ csrf_token() }}",
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            if (response.data.length > 0) {
+                                $("#subcategory_id").prop('disabled', false);
+                                $("#subcategory_id").html('<option value="">Select Subcategory</option>');
+                                response.data.forEach(element => {
+                                    $("#subcategory_id").append('<option value="' + element.id + '">' + element.name + '</option>');
+                                });
+                            } else {
+                                $("#subcategory_id").prop('disabled', true);
+                                $("#subcategory_id").html('<option value="null">No Subcategory Found</option>');
+                            }
+                        } else {
+                            $("#subcategory_id").prop('disabled', true);
+                            $("#subcategory_id").html('<option value="">Select Category First</option>');
+                        }
+                    }
+                });
+            } else {
+                $("#subcategory_id").prop('disabled', true);
+                $("#subcategory_id").html('<option value="">Select Category First</option>');
+            }
+        });
+    });
+
+
     </script>
 @endpush

@@ -3,6 +3,7 @@
 use App\Http\Controllers as Con;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PosController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
@@ -113,9 +114,14 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
     });
 
      //pos
-     Route::get('pos', function () {
-        return view('pos.index');
-    })->name('pos');
+    //  Route::get('pos', function () {
+    //     return view('pos.index');
+    // })->name('pos');
+
+    
+    Route::get('pos', [PosController::class, 'index'])->name('pos');
+    Route::post('subcategories/', [PosController::class, 'getSubCategories'])->name('pos.subcategories');
+
 
 
 });
