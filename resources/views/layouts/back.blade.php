@@ -11,20 +11,26 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"  />
 
    <!-- CSS Libraries -->
-   <link rel="stylesheet" href="{{ asset('assets/modules/jqvmap/dist/jqvmap.min.css')}}">
-   <link rel="stylesheet" href="{{ asset('assets/modules/summernote/summernote-bs4.cs')}}s">
-   <link rel="stylesheet" href="{{ asset('assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
-   <link rel="stylesheet" href="{{ asset('assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
+   <link rel="stylesheet" href="{{ asset('backend/assets/modules/jqvmap/dist/jqvmap.min.css')}}">
+   <link rel="stylesheet" href="{{ asset('backend/assets/modules/summernote/summernote-bs4.cs')}}s">
+   <link rel="stylesheet" href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
+   <link rel="stylesheet" href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/izitoast/css/iziToast.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/chocolat/dist/css/chocolat.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/select2/dist/css/select2.min.css') }}">
+
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css')}}">
   <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css')}}">
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+
 
     @stack('styles')
+
+
 </head>
 
 <body>
@@ -75,31 +81,10 @@
 
   @include('notification.toast')
    <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
-   <script>
-       $(document).ready(function() {
-           const addSelectAll = matches => {
-               if (matches.length > 0) {
-               // Insert a special "Select all matches" item at the start of the
-               // list of matched items.
-               return [
-                   {id: 'selectAll', text: 'Select all matches', matchIds: matches.map(match => match.id)},
-                   ...matches
-               ];
-               }
-           };
-           const handleSelection = event => {
-               if (event.params.data.id === 'selectAll') {
-               $('.select2').val(event.params.data.matchIds);
-               $('.select2').trigger('change');
-               };
-           };
-           $('.select2').select2({
-               multiple: true,
-               sorter: addSelectAll,
-           });
-           $('.select2').on('select2:select', handleSelection);
-       });
-   </script>
-  @stack('scripts')
+   <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+     @stack('scripts')
+
+
+
 </body>
 </html>

@@ -29,8 +29,7 @@ return new class extends Migration {
                 $table->string('status')->default('active'); // Status of the product
             }
             if (!Schema::hasColumn('products', 'subcategory_id')) {
-                $table->unsignedBigInteger('subcategory_id'); // Subcategory ID
-                $table->foreign('subcategory_id')->references('id')->on('sub_categories')->onDelete('cascade')->onUpdate('cascade'); // Corrected table name
+                $table->unsignedBigInteger('subcategory_id')->nullable(); // Subcategory ID
             }
         });
     }

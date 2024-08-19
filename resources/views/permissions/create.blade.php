@@ -1,7 +1,6 @@
 @extends('layouts.back')
 @section('title', 'Add New Permmissions')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/assets/modules/select2/dist/css/select2.min.css') }}">
 @endpush
 @section('content')
 <section class="section">

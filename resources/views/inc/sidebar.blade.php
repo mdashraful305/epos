@@ -15,33 +15,9 @@
           </ul>
         </li>
         @if(auth()->user()->hasRole('Shop Owner'))
-            @can(['index-categorie'])
-                <li class="menu-header">Category Management</li>
-                <li class="dropdown {{Route::is('categories.*') ? 'active' : '' }}">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-cubes"></i> <span>Category</span></a>
-                <ul class="dropdown-menu">
-                    @can('index-categorie')
-                    <li class="{{ Route::is('categories.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('categories.index') }}">Category List</a></li>
-                    @endcan
-                </ul>
-                </li>
-            @endcan
-
-            @can(['index-subcategorie'])
-            <li class="menu-header">SubCategory Management</li>
-            <li class="dropdown {{Route::is('subcategories.*') ? 'active' : '' }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-cubes"></i> <span>SubCategory</span></a>
-            <ul class="dropdown-menu">
-                @can('index-categorie')
-                <li class="{{ Route::is('subcategories.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('subcategories.index') }}">Category List</a></li>
-                @endcan
-            </ul>
-            </li>
-            @endcan
-
-            @can(['index-categorie'])
+            @can(['index-categorie', 'index-categorie', 'index-product'])
                 <li class="menu-header">Product Management</li>
-                <li class="dropdown {{Route::is('products.*') ? 'active' : '' }}">
+                <li class="dropdown {{Route::is('products.*') || Route::is('categories.*') ||  Route::is('subcategories.*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-shopping-basket"></i> <span>Product</span></a>
                 <ul class="dropdown-menu">
                     @can('create-categorie')
@@ -49,6 +25,12 @@
                     @endcan
                     @can('index-categorie')
                     <li class="{{ Route::is('products.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('products.index') }}">Product List</a></li>
+                    @endcan
+                    @can('index-categorie')
+                    <li class="{{ Route::is('categories.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('categories.index') }}">Category List</a></li>
+                    @endcan
+                    @can('index-categorie')
+                    <li class="{{ Route::is('subcategories.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('subcategories.index') }}">SubCategory List</a></li>
                     @endcan
                 </ul>
                 </li>

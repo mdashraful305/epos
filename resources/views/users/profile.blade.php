@@ -1,7 +1,6 @@
 @extends('layouts.back')
 @section('title', 'Profile')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/assets/modules/select2/dist/css/select2.min.css') }}">
 @endpush
 @section('content')
 @php
@@ -128,7 +127,6 @@
   </section>
 @endsection
 @push('scripts')
-    <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('.select2').select2();

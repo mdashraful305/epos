@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -22,6 +21,9 @@ class ProductController extends Controller
 
             return DataTables::of($data)
                     ->addIndexColumn()
+                    ->addColumn('category', function($data){
+                        return $data->category->name;
+                    })
                     ->addColumn('action', function($row){
                         $btn = '<div class="d-flex">';
                         $btn .= '<button class="btn btn-primary btn edit mr-2" data-id="'.$row['id'].'"  onclick="edit('.$row['id'].')"><i class="fa-solid fa-pencil"></i></button>';
@@ -32,35 +34,38 @@ class ProductController extends Controller
                     ->addColumn('image', function($data) {
                         return '<img src="'.asset($data->image).'" width="60px"/>';
                     })
-                    ->rawColumns(['action','image'])
+                    ->editColumn('status', function($data){
+                        if($data->status == 1){
+                            return '<input class="toggle-demo" type="checkbox" checked data-toggle="toggle" data-on="on" data-off="Off" data-onstyle="success" data-offstyle="danger" onchange="status('.$data->id.',0)">';
+                        } else {
+                            return '<input class="toggle-demo" type="checkbox" data-toggle="toggle" data-on="on" data-off="Off"" data-onstyle="success" data-offstyle="danger"  onchange="status('.$data->id.',1)">';
+                        }
+                    })
+                    ->rawColumns(['action','image','status'])
                     ->make(true);
         }
 
-        $categories = Category::where('store_id', auth()->user()->store_id)->get();
-        $subcategories = SubCategory::where('store_id', auth()->user()->store_id)->get();
-        return view('products.index', compact('categories','subcategories'));
+        return view('products.index');
     }
 
     public function create()
     {
         $categories = Category::where('store_id', auth()->user()->store_id)->get();
-        $subcategories = SubCategory::where('store_id', auth()->user()->store_id)->get();
-        return view('products.create', compact('categories','subcategories'));
+        return view('products.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+       $this->validate($request, [
             'name' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            
+            'category_id' => 'required',
+            'price' => 'required',
+            'original_price' => 'required',
+            'stock' => 'required',
+            'sku' => 'required',
+            'status' => 'required',
         ]);
-        if($validator->fails()){
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
 
         try{
             $path = '/images/product';
@@ -72,22 +77,21 @@ class ProductController extends Controller
 
             $product = Product::create([
                 'name' => $request->name,
-                'slug' => Str::slug($request->name),
+                'slug' => slug($request->name),
                 'image' => $image_path,
                 'store_id' => auth()->user()->store_id,
                 'category_id' => $request->category_id,
                 'price' => $request->price,
                 'original_price' => $request->original_price,
-                'discounted_price' => $request->discounted_price,
+                'discounted_price' => $request->discounted_price??null,
                 'stock' => $request->stock,
                 'sku' => $request->sku,
                 'status' => $request->status,
-                'subcategory_id' => $request->subcategory_id,
+                'subcategory_id' => $request->subcategory_id??null,
             ]);
-
-            return response()->json(['status' => true, 'message' => 'Product created successfully']);
+            return redirect()->route('products.index')->with('success', 'Product created successfully');
         } catch(\Exception $e){
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -99,16 +103,16 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
+        $this->validate($request, [
             'name' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category_id' => 'required',
+            'price' => 'required',
+            'original_price' => 'required',
+            'stock' => 'required',
+            'sku' => 'required',
+            'status' => 'required',
         ]);
-        if($validator->fails()){
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
 
         try{
             $product = Product::find($id);
@@ -127,22 +131,20 @@ class ProductController extends Controller
 
             $product->update([
                 'name' => $request->name,
-                'slug' => Str::slug($request->name),
                 'image' => $image_path,
-                'store_id' => auth()->user()->store_id,
                 'category_id' => $request->category_id,
                 'price' => $request->price,
                 'original_price' => $request->original_price,
-                'discounted_price' => $request->discounted_price,
+                'discounted_price' => $request->discounted_price??null,
                 'stock' => $request->stock,
                 'sku' => $request->sku,
                 'status' => $request->status,
-                'subcategory_id' => $request->subcategory_id,
+                'subcategory_id' => $request->subcategory_id??null,
             ]);
 
-            return response()->json(['status' => true, 'message' => 'Product updated successfully']);
+            return redirect()->route('products.index')->with('success', 'Product updated successfully');
         } catch(\Exception $e){
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -157,18 +159,18 @@ class ProductController extends Controller
         return response()->json(['status' => true, 'message' => 'Product deleted successfully']);
     }
 
-    public function details($id)
+
+    public function getSubCategories(Request $request)
     {
-        $product = Product::find($id);
-        return view('products.details', compact('product'));
+        $subcategories = SubCategory::where('category_id', $request->category_id)->get();
+        return response()->json(['status' => true, 'data' => $subcategories]);
     }
 
-    public function activate($id)
-    {
-        $product = Product::find($id);
-        $product->status = 'active';
-        $product->save();
 
-        return response()->json(['status' => true, 'message' => 'Product activated successfully']);
+    public function changeStatus(Request $request)
+    {
+        $product = Product::find($request->id);
+        $product->update(['status' => $request->status]);
+        return response()->json(['status' => true, 'message' => 'Status updated successfully']);
     }
 }

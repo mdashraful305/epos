@@ -1,7 +1,6 @@
 @extends('layouts.back')
 @section('title', 'Add New User')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/assets/modules/select2/dist/css/select2.min.css') }}">
 @endpush
 @section('content')
 <section class="section">
@@ -104,7 +103,11 @@
 </section>
 @endsection
 @push('scripts')
-
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
 
 @endpush
 
