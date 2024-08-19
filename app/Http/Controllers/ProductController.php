@@ -26,7 +26,7 @@ class ProductController extends Controller
                     })
                     ->addColumn('action', function($row){
                         $btn = '<div class="d-flex">';
-                        $btn .= '<button class="btn btn-primary btn edit mr-2" data-id="'.$row['id'].'"  onclick="edit('.$row['id'].')"><i class="fa-solid fa-pencil"></i></button>';
+                        $btn .= '<a href="'.route('products.edit',$row->id).'" class="btn btn-primary btn edit mr-2"><i class="fa-solid fa-pencil"></i></a>';
                         $btn .= '<button class="btn btn-danger btn delete" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="fa-solid fa-trash"></i></button>';
                         $btn .= '</div>';
                         return $btn;
@@ -79,6 +79,7 @@ class ProductController extends Controller
                 'name' => $request->name,
                 'slug' => slug($request->name),
                 'image' => $image_path,
+                'description' => $request->description??null,
                 'store_id' => auth()->user()->store_id,
                 'category_id' => $request->category_id,
                 'price' => $request->price,
@@ -98,14 +99,15 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-        return response()->json(['status' => true, 'data' => $product]);
+        $categories = Category::where('store_id', auth()->user()->store_id)->get();
+        return view('products.edit', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
             'name' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category_id' => 'required',
             'price' => 'required',
             'original_price' => 'required',
@@ -132,6 +134,7 @@ class ProductController extends Controller
             $product->update([
                 'name' => $request->name,
                 'image' => $image_path,
+                'description' => $request->description??null,
                 'category_id' => $request->category_id,
                 'price' => $request->price,
                 'original_price' => $request->original_price,

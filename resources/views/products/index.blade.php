@@ -104,13 +104,14 @@
                     data: {"_token": token},
                     success: function (data) {
                         if(data.status){
+                            iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
                             $('#data-table').DataTable().ajax.reload();
                         } else {
-                            alert(data.message);
+                            iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
                         }
                     },
                     error: function(err){
-                        alert('Something went wrong. Please try again later.');
+                        iziToast.error({title: 'Error',timeout: 1500,message: 'Something Went Wrong',position: 'topRight'});
                     }
                 });
             }

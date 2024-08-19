@@ -2820,7 +2820,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 }
 
 .modal-lg {
-    max-width: 80%;
+    max-width: 800px;
 }
 
 
