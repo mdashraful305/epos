@@ -43,6 +43,9 @@
                 @can('index-categorie')
                 <li class="{{ Route::is('stores.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('stores.index') }}">Store List</a></li>
                 @endcan
+                @can('show-store')
+                <li class="{{ Route::is('stores.show')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('stores.show', Auth::user()->store->id) }}">Store Profile</a></li>
+                @endcan
             </ul>
             </li>
         @endcan

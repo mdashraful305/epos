@@ -54,7 +54,6 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         'roles' => RoleController::class,
         'users' => UserController::class,
         'permissions' => PermissionController::class,
-        'stores' => StoreController::class,
     ]);
 
     //catagoey
@@ -102,6 +101,16 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         Route::post('change-status', [ProductController::class, 'changeStatus'])->name('change-status');
     });
 
+    //store
+    Route::group(['as'=> 'stores.', 'prefix' => 'stores'],function (){
+        Route::get('/', [StoreController::class, 'index'])->name('index');
+        Route::get('create', [StoreController::class, 'create'])->name('create');
+        Route::post('store', [StoreController::class, 'store'])->name('store');
+        Route::get('show/{id}', [StoreController::class, 'show'])->name('show');
+        Route::get('edit/{id}', [StoreController::class, 'edit'])->name('edit');
+        Route::post('update/{id}', [StoreController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [StoreController::class, 'destroy'])->name('destroy');
+    });
 
      //pos
      Route::get('pos', function () {

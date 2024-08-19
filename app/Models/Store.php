@@ -17,4 +17,10 @@ class Store extends Model
         'address',
         'phone',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id', 'store_id');
+   
+    }
 }
