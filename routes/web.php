@@ -24,7 +24,7 @@ use App\Http\Controllers\SubCategoryController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-include('test.php');
+include('shifat.php');
 Route::get('/', function () {
     return view('welcome');
 });
