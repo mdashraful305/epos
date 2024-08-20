@@ -25,7 +25,7 @@
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <select class="form-control" name="category_id" id="category_id">
+                                    <select class="form-control select2" name="category_id" id="category_id">
                                         <option value="">Select Category</option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -47,21 +47,19 @@
                         <div class="container">
                                 <div class="row">
                                         <!-- Single Product -->
-                                        @for ($i = 0; $i < 12; $i++)
-                                            <div class="card col-md-2 col-lg-2 col-xl-2">
-                                                <div id="product-1" class="single-product text-center">
-                                                        <div class="part-1" style=" background: url(https://demo.activeitzone.com/ecommerce/uploads/all/B1hum7tEVbTF5SOV0eQdwB6NgyLUPO1wif5QtaO8.webp) center /contain no-repeat">
-                                                        </div>
-                                                        <div class="part-2">
-                                                                <h3 class="product-title">Here Product Title</h3>
-                                                                <h4 class="product-old-price">$79.99</h4>
-                                                                <h4 class="product-price">$49.99</h4>
-                                                        </div>
-
-                                                        <button class="btn btn-outline-danger mt-1"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
+                                    <div class="card col-md-2 col-lg-2 col-xl-2">
+                                        <div id="product-1" class="single-product text-center">
+                                                <div class="part-1" style=" background: url(https://demo.activeitzone.com/ecommerce/uploads/all/B1hum7tEVbTF5SOV0eQdwB6NgyLUPO1wif5QtaO8.webp) center /contain no-repeat">
                                                 </div>
-                                            </div>
-                                        @endfor
+                                                <div class="part-2">
+                                                        <h3 class="product-title">Here Product Title</h3>
+                                                        <h4 class="product-old-price">$79.99</h4>
+                                                        <h4 class="product-price">$49.99</h4>
+                                                </div>
+
+                                                <button class="btn btn-outline-danger mt-1"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
+                                        </div>
+                                    </div>
                                 </div>
                         </div>
                 </section>
@@ -74,8 +72,7 @@
                 <img class="card-img-top" src="holder.js/100x180/" alt="">
                 @can('create-customer')
                 <div class="input-group">
-                    <select class="custom-select" id="inputGroupSelect04">
-                        <option value="1">Walk in Customer</option>
+                    <select class="custom-select" id="customer_select">
                     </select>
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#modelId"><i class="fa-solid fa-user-plus"></i></button>
@@ -282,7 +279,39 @@
             });
         });
     });
+    $(document).ready(function () {
+        var $select2 = $('#customer_select');
 
+        $select2.select2({
+        ajax: {
+            url: '{{ route('pos.customers') }}',
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: data.results
+                };
+            },
+            cache: true
+        },
+        placeholder: 'Select an option',
+        minimumInputLength: 1,
+    });
+
+    $select2.on('select2:open', function () {
+        var searchField = $('.select2-search__field');
+
+    });
+
+    $select2.on('select2:select', function (e) {
+
+    });
+});
 
     $(document).ready(function() {
         $('#category_id').change(function() {

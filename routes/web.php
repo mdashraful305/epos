@@ -113,15 +113,12 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         Route::delete('destroy/{id}', [StoreController::class, 'destroy'])->name('destroy');
     });
 
-     //pos
-    //  Route::get('pos', function () {
-    //     return view('pos.index');
-    // })->name('pos');
-
-    
-    Route::get('pos', [PosController::class, 'index'])->name('pos');
-    Route::post('subcategories/', [PosController::class, 'getSubCategories'])->name('pos.subcategories');
-
-
+    //pos
+    Route::group(['as'=> 'pos.', 'prefix' => 'pos'],function (){
+        Route::get('/', [PosController::class, 'index'])->name('index');
+        Route::post('subcategories/', [PosController::class, 'getSubCategories'])->name('subcategories');
+        Route::post('products/', [PosController::class, 'getProducts'])->name('products');
+        Route::get('customers/', [PosController::class, 'getCustomers'])->name('customers');
+    });
 
 });
