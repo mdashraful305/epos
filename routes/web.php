@@ -9,6 +9,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
@@ -120,5 +121,20 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         Route::post('products/', [PosController::class, 'getProducts'])->name('products');
         Route::get('customers/', [PosController::class, 'getCustomers'])->name('customers');
     });
+
+
+
+
+    //expense
+    Route::group(['as'=> 'expenses.', 'prefix' => 'expenses'], function () {
+        Route::get('/', [ExpenseController::class, 'index'])->name('index');
+        Route::get('create', [ExpenseController::class, 'create'])->name('create');
+        Route::post('store', [ExpenseController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [ExpenseController::class, 'edit'])->name('edit');
+        Route::post('update/{id}', [ExpenseController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [ExpenseController::class, 'destroy'])->name('destroy');
+    });
+
+
 
 });
