@@ -70,53 +70,54 @@
                             <label for="expense_date">Date</label>
                             <input type="date" class="form-control" name="expense_date" id="expense_date" required>
                         </div>
+
                         <div class="form-group">
                             <label for="expense_category">Select Category</label>
-                            <input list="expense_category" class="form-control" name="expense_category"
-                                id="expense_category" required>
-                            <datalist id="expense_category">
+                            <input list="expense-categories" id="expense_category" class="form-control" name="expense_category" required>
+                            <datalist id="expense-categories">
                                 @php
-                                    $categories = [
-                                        'Rent',
-                                        'Utilities',
-                                        'Cleaning Services',
-                                        'Salaries and Wages',
-                                        'Employee Benefits',
-                                        'Training and Development',
-                                        'Travel and Accommodation',
-                                        'Employee Reimbursements',
-                                        'Advertising',
-                                        'Promotions',
-                                        'Public Relations',
-                                        'Digital Marketing',
-                                        'Software Licenses',
-                                        'IT Support',
-                                        'Website Maintenance',
-                                        'Hardware Purchases',
-                                        'Bank Fees',
-                                        'Legal Fees',
-                                        'Accounting and Auditing',
-                                        'Taxes',
-                                        'Insurance',
-                                        'Raw Materials',
-                                        'Finished Goods',
-                                        'Freight and Shipping',
-                                        'Packaging',
-                                        'Depreciation',
-                                        'Leasing',
-                                        'Transportation',
-                                        'Security',
-                                        'Subscriptions',
-                                        'Donations and Sponsorships',
-                                        'Gifts and Entertainment',
-                                        'Miscellaneous',
-                                    ];
+                                $categories = [
+                                    'Rent',
+                                    'Utilities',
+                                    'Cleaning Services',
+                                    'Salaries and Wages',
+                                    'Employee Benefits',
+                                    'Training and Development',
+                                    'Travel and Accommodation',
+                                    'Employee Reimbursements',
+                                    'Advertising',
+                                    'Promotions',
+                                    'Public Relations',
+                                    'Digital Marketing',
+                                    'Software Licenses',
+                                    'IT Support',
+                                    'Website Maintenance',
+                                    'Hardware Purchases',
+                                    'Bank Fees',
+                                    'Legal Fees',
+                                    'Accounting and Auditing',
+                                    'Taxes',
+                                    'Insurance',
+                                    'Raw Materials',
+                                    'Finished Goods',
+                                    'Freight and Shipping',
+                                    'Packaging',
+                                    'Depreciation',
+                                    'Leasing',
+                                    'Transportation',
+                                    'Security',
+                                    'Subscriptions',
+                                    'Donations and Sponsorships',
+                                    'Gifts and Entertainment',
+                                    'Miscellaneous',
+                                ];
                                 @endphp
                                 @foreach ($categories as $category)
                                     <option value="{{ $category }}"></option>
                                 @endforeach
                             </datalist>
                         </div>
+
                         <div class="form-group">
                             <label for="expense_description">Description</label>
                             <textarea class="form-control" name="expense_description" id="expense_description" required></textarea>
@@ -134,7 +135,6 @@
             </div>
         </div>
     </div>
-
 @endpush
 @push('scripts')
     <script type="text/javascript">
@@ -144,32 +144,13 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ route('expenses.index') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex'
-                    },
-                    {
-                        data: 'expense_date',
-                        name: 'expense_date'
-                    },
-                    {
-                        data: 'expense_category',
-                        name: 'expense_category'
-                    },
-                    {
-                        data: 'expense_description',
-                        name: 'expense_description'
-                    },
-                    {
-                        data: 'expense_amount',
-                        name: 'expense_amount'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'expense_date', name: 'expense_date' },
+                    { data: 'expense_category', name: 'expense_category' },
+                    { data: 'expense_description', name: 'expense_description' },
+                    { data: 'expense_amount', name: 'expense_amount' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false },
                 ]
             });
 
@@ -186,9 +167,7 @@
                 $.ajax({
                     url: $(this).attr('action'),
                     method: $(this).attr('method'),
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
                     data: formData,
                     contentType: false,
                     processData: false,
@@ -255,10 +234,7 @@
                         $.ajax({
                             type: "DELETE",
                             url: url,
-                            data: {
-                                "id": id,
-                                "_token": token,
-                            },
+                            data: { "id": id, "_token": token },
                             success: function(data) {
                                 if (data.status) {
                                     iziToast.success({
