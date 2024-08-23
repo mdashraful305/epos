@@ -2911,7 +2911,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 }
 
 .product-image {
-    width: 70px;
+    width: 100%;
     height: auto;
     border-radius: 8px;
 }
@@ -2944,6 +2944,7 @@ body:not(.sidebar-mini) .sidebar-style-2 .sidebar-menu li.active ul.dropdown-men
 .quantity-selector {
     border-radius: 5px;
     max-width: 100px;
+    cursor: pointer;
 }
 
 .quantity-input {
@@ -2958,7 +2959,6 @@ input::-webkit-inner-spin-button {
     margin: 0;
 }
 .cart-summary input[type="number"]{
-    width: 100px;
     float: right;
     text-align: right;
     outline: none;
@@ -2975,4 +2975,8 @@ input::-webkit-inner-spin-button {
 .cart-summary div, .cart-summary input{
     font-weight: bold;
     font-size: 16px;
+}
+
+.card{
+    margin-bottom: 5px;
 }

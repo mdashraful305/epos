@@ -76,7 +76,7 @@ class CustomerController extends Controller
                 'store_id' => auth()->user()->store_id
             ]);
 
-            return response()->json(['status' => true, 'message' => 'Customer created successfully']);
+            return response()->json(['status' => true, 'message' => 'Customer created successfully', 'data' => $customer]);
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }

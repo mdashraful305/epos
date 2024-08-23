@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PosController;
 
-Route::get('/test', function () {
-    return redirect()->route('dashboard');
+
+Route::group(['as'=> 'pos.', 'prefix' => 'pos'],function (){
+    Route::post('/add-to-cart', [PosController::class, 'addToCart'])->name('add-to-cart');
 });
