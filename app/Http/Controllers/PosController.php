@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\SubCategory;
@@ -23,6 +25,34 @@ class PosController extends Controller
         return response()->json(['status' => true, 'data' => $subcategories]);
     }
 
+    public function getProducts(Request $request)
+    {
+       $product=Product::query();
+        $product->where('store_id', auth()->user()->store_id)->where('status', 1);
+         if($request->category_id!=null){
+              $product->where('category_id',$request->category_id);
+         }
+        if($request->subcategory_id!=null){
+            $product->where('subcategory_id',$request->subcategory_id);
+        }
+        if($request->search!=null){
+            $product->where('name','LIKE',"%{$request->search}%");
+        }
+
+        $perPage = 12;
+        $currentPage = $request->input('page', 1);
+
+        $products = $product->paginate($perPage, ['*'], 'page', $currentPage);
+
+
+        return response()->json([
+            'status' => true,
+            'data' => $products->items(),
+            'next_page' => $products->hasMorePages() ? $currentPage + 1 : null,
+        ]);
+
+    }
+
     public function getCustomers(Request $request)
     {
         $search = $request->input('search');
@@ -40,5 +70,48 @@ class PosController extends Controller
         });
 
         return response()->json(['status' => true, 'results' => $results]);
+  }
+
+
+  public function addToCart(Request $request){
+        $product = Product::find($request->product_id);
+        if($request->customer_id==null){
+            return response()->json(['status' => false,'message'=>'Please Select Customer']);
+        }
+        $data=[
+            'product_id'=>$product->id,
+            'quantity'=>$request->quantity,
+            'price'=>$product->discounted_price,
+            'added_by'=>auth()->id(),
+            'customer_id'=>$request->customer_id,
+            'store_id'=>auth()->user()->store_id,
+            'status'=>'pending',
+        ];
+        $cart=Cart::create($data);
+        $cart=Cart::where('customer_id',$request->customer_id)->where('status','pending')->get();
+            $html='';
+            foreach($cart as $item){
+                $html .= '<div class="row product-cart" id="product-'.$item->id.'">';
+                $html .= ' <div class="col-md-2"><img src="'.$item->product->image.'" alt="Product Image" class="product-image "></div>';
+                $html .= ' <div class="col-md-4">';
+                $html .= ' <h3 class="product-name">'.$item->product->name.'</h3>';
+                $html .= ' <p class="product-price">$'.$item->price.'</p>';
+                $html .= ' </div>';
+                $html .= ' <div class="col-md-4">';
+                $html .= ' <div class="quantity-selector d-flex align-items-center justify-content-between"><i
+                            class="fa-solid fa-minus stepper-icon"
+                            onclick="this.parentNode.querySelector(\'input[type=number]\').stepDown()"></i>';
+                $html .= ' <input type="number" class="form-control text-center quantity-input px-1" value="'.$item->quantity.'" min="1" max="10">
+                            <i class="fa-solid fa-plus stepper-icon" onclick="this.parentNode.querySelector(\'input[type=number]\').stepUp()"></i></div>';
+                $html .= ' </div>';
+                $html .= '<div class="col-md-2"><button class="remove-btn" onclick="removeFromCart('.$item->id.')"><i
+                            class="fas fa-trash"></i></button></div></div>';
+            }
+
+        $subtotal=Cart::CartTotal($request->customer_id);
+
+
+
+        return response()->json(['status' => true,'message'=>'Product Added Successflly', 'data' => $html,'subtotal'=>$subtotal]);
   }
 }

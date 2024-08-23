@@ -1,6 +1,23 @@
 @extends('layouts.back')
 @section('title', 'Manage Categories')
 @push('styles')
+<style>
+    .product-wrapper{
+        position: relative
+    }
+    .ajax-loader {
+        display: none;
+        z-index: 30001;
+    }
+    .ajax-load-img{
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+</style>
 @endpush
 @section('content')
 <section class="section">
@@ -13,7 +30,7 @@
     </div>
 
 
-    <div class="row">
+    <div class="row" >
         <div class="col-md-8">
             <div class="card">
                 <img class="card-img-top" src="holder.js/100x180/" alt="">
@@ -21,7 +38,7 @@
                     <form class="">
                         <div class="form-row">
                             <div class="col">
-                                <input type="text" class="form-control" placeholder="Search By Product Name / SKU ">
+                                <input type="text" class="form-control" id="category_search" placeholder="Search By Product Name / SKU ">
                             </div>
                             <div class="col">
                                 <div class="form-group">
@@ -44,23 +61,15 @@
                     </form>
 
                     <section class="section-products">
-                        <div class="container">
+                        <div class="container product-wrapper">
                                 <div class="row">
                                         <!-- Single Product -->
-                                    <div class="card col-md-2 col-lg-2 col-xl-2">
-                                        <div id="product-1" class="single-product text-center">
-                                                <div class="part-1" style=" background: url(https://demo.activeitzone.com/ecommerce/uploads/all/B1hum7tEVbTF5SOV0eQdwB6NgyLUPO1wif5QtaO8.webp) center /contain no-repeat">
-                                                </div>
-                                                <div class="part-2">
-                                                        <h3 class="product-title">Here Product Title</h3>
-                                                        <h4 class="product-old-price">$79.99</h4>
-                                                        <h4 class="product-price">$49.99</h4>
-                                                </div>
 
-                                                <button class="btn btn-outline-danger mt-1"><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button>
-                                        </div>
-                                    </div>
                                 </div>
+                                <div class="ajax-loader">
+                                    <img src="{{ url('https://upload.wikimedia.org/wikipedia/commons/c/c7/Loading_2.gif') }}" class="img-responsive ajax-load-img" />
+                                </div>
+                                <button class="btn btn-sm btn-primary float-right m-auto" id="load-more">Load More</button>
                         </div>
                 </section>
                 </div>
@@ -68,48 +77,31 @@
         </div>
         <div class="col-md-4 card cart-summary">
 
-            <div class="">
-                <img class="card-img-top" src="holder.js/100x180/" alt="">
+            <div class="pt-3">
                 @can('create-customer')
-                <div class="input-group">
-                    <select class="custom-select" id="customer_select">
-                    </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#modelId"><i class="fa-solid fa-user-plus"></i></button>
+                <div class="mb-1 row">
+                    <div class="col-sm-10">
+                        <select class="custom-select" id="customer_select">
+                        </select>
+                    </div>
+                    <div class="col-sm-2 text-right">
+                        <button class="btn btn-outline-secondary" type="button" data-toggle="modal" data-target="#modelId"><i class="fa-solid fa-user-plus"></i>Add</button>
                     </div>
                 </div>
+
             @endcan
-                @for ($i = 0; $i < 2; $i++)
-                    <div class="selected-product-column">
-                            <div class="row product-cart">
-                                <div class="col-md-2">
-                                    <img src="https://demo.activeitzone.com/ecommerce/uploads/all/B1hum7tEVbTF5SOV0eQdwB6NgyLUPO1wif5QtaO8.webp" alt="Product Image" class="product-image ">
-                                </div>
-                                <div class="col-md-4">
-                                    <h3 class="product-name">Product Name</h3>
-                                    <p class="product-price">$19.99</p>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="quantity-selector d-flex align-items-center justify-content-between">
-                                        <i class="fa-solid fa-minus stepper-icon" onclick="this.parentNode.querySelector('input[type=number]').stepDown()"></i>
-                                        <input type="number" class="form-control text-center quantity-input px-1" value="1" min="1" max="10">
-                                        <i class="fa-solid fa-plus stepper-icon" onclick="this.parentNode.querySelector('input[type=number]').stepUp()"></i>
-                                    </div>
+            <div class="selected-product-column">
+                <div class="row product-cart">
 
 
-                                </div>
-                                <div class="col-md-2">
-                                    <button class="remove-btn"><i class="fas fa-trash"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    @endfor
+                </div>
             </div>
-            <div>
+            </div>
+            <div class="mt-5">
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Sub Total</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" id="sub-total" value="100" readonly>
+                        <input type="number" class="form-control" id="sub-total" value="0" readonly>
                     </div>
                 </div>
                 <div class="mb-1 row">
@@ -133,7 +125,7 @@
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Total</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" id="total" value="120" readonly>
+                        <input type="number" class="form-control" id="total" value="0" readonly>
                     </div>
                 </div>
                 <div class="text-center my-3">
@@ -261,8 +253,8 @@
                     if(data.status){
                         iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
                         $('#modelId').modal('hide');
-                        $('#data-table').DataTable().ajax.reload();
                         $('#customer-add')[0].reset();
+                        $('#customer_select').append('<option value="'+data.data.id+'" selected>'+data.data.name+'</option>');
                         modalShown = true; // Prevent modal from showing again
                     }else{
                         iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
@@ -280,43 +272,104 @@
         });
     });
     $(document).ready(function () {
-        var $select2 = $('#customer_select');
+            var $select2 = $('#customer_select');
 
-        $select2.select2({
-        ajax: {
-            url: '{{ route('pos.customers') }}',
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    search: params.term
-                };
+            $select2.select2({
+            ajax: {
+                url: '{{ route('pos.customers') }}',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: data.results
+                    };
+                },
+                cache: true
             },
-            processResults: function (data) {
-                return {
-                    results: data.results
-                };
+            placeholder: 'Select an option',
+            minimumInputLength: 1,
+        });
+
+        $select2.on('select2:open', function () {
+            var searchField = $('.select2-search__field');
+
+        });
+
+        $select2.on('select2:select', function (e) {
+
+        });
+    });
+    let page = 1;
+    function loadProducts(cat_id=null,sub_cat_id=null,search=null){
+        $.ajax({
+            type: "POST",
+            url: "{{ route('pos.products') }}",
+            data: {
+                page: page,
+                search: search,
+                category_id: cat_id,
+                subcategory_id: sub_cat_id,
+                _token: "{{ csrf_token() }}",
             },
-            cache: true
-        },
-        placeholder: 'Select an option',
-        minimumInputLength: 1,
+            dataType: "json",
+            beforeSend: function() {
+                $(".ajax-loader").show();
+                $('#load-more').hide();
+            },
+            success: function (response) {
+                if (response.status) {
+                    $('.section-products .row').html('');
+                    response.data.forEach(element  => {
+                        $(".section-products .row").append('<div class="card col-md-2 col-lg-2 col-xl-2"><div id="product-1" class="single-product text-center"><div class="part-1" style=" background: url('+element.image+') center /contain no-repeat"></div><div class="part-2"><h3 class="product-title">'+element.name+'</h3><h4 class="product-old-price">$'+element.price+'</h4><h4 class="product-price">$'+element.discounted_price+'</h4></div><button class="btn btn-outline-danger mt-1" onclick=addToCart('+element.id+','+element.discounted_price+')><i class="fa-solid fa-cart-shopping"></i>Add to Cart</button></div></div>');
+
+                    });
+                    page++;
+                    if(response.next_page==null){
+                        $('#load-more').hide();
+                        page=1;
+                    }
+                    else
+                       $('#load-more').show();
+                    $(".ajax-loader").hide();
+                }else{
+                    $('#load-more').hide();
+                }
+            },
+            complete: function() {
+                $(".ajax-loader").hide();
+            },
+
+        });
+    }
+    loadProducts();
+    $('#category_search').on('keyup', function() {
+        page=1;
+        var value = $(this).val().toLowerCase();
+        var cat_id=$('#category_id').val()??null;
+        var sub_cat_id=$('#subcategory_id').val()??null;
+        if(value.length>0){
+            loadProducts(cat_id,sub_cat_id,value);
+        }else{
+            loadProducts(cat_id,sub_cat_id,null);
+        }
     });
-
-    $select2.on('select2:open', function () {
-        var searchField = $('.select2-search__field');
-
+    $('#load-more').on('click', function() {
+        $('#load-more').hide();
+        $('.section-products .row').html('');
+        loadProducts();
     });
-
-    $select2.on('select2:select', function (e) {
-
-    });
-});
 
     $(document).ready(function() {
         $('#category_id').change(function() {
             var category_id = $(this).val();
+            var value=$('#category_search').val()??null;
             if (category_id) {
+                loadProducts(category_id,null,value);
                 $.ajax({
                     url: "{{ route('products.subcategories') }}",
                     type: "POST",
@@ -324,7 +377,7 @@
                         category_id: category_id,
                         _token: "{{ csrf_token() }}",
                     },
-                    success: function(response) {
+                    success: function(response,) {
                         if (response.status) {
                             if (response.data.length > 0) {
                                 $("#subcategory_id").prop('disabled', false);
@@ -343,12 +396,53 @@
                     }
                 });
             } else {
+                loadProducts(null,null,null);
                 $("#subcategory_id").prop('disabled', true);
                 $("#subcategory_id").html('<option value="">Select Category First</option>');
             }
         });
     });
 
+    $('#subcategory_id').change(function (e) {
+        e.preventDefault();
+        var subcategory_id = $(this).val();
+        loadProducts($('#category_id').val(),subcategory_id,null);
+    });
 
+
+    // Add to cart
+    function addToCart(id,price){
+        var customer_id = $('#customer_select').val();
+        $.ajax({
+            type: "POST",
+            url: "{{ route('pos.add-to-cart') }}",
+            data: {
+                product_id: id??null,
+                price: price??null,
+                customer_id: customer_id??null,
+                quantity:1,
+                _token: "{{ csrf_token() }}",
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status) {
+                    iziToast.success({title: 'Success',timeout: 1500,message: response.message,position: 'topRight'});
+                    $('.selected-product-column').html(response.data);
+                    $("#sub-total").val(response.subtotal);
+
+                }else{
+                    iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
+                }
+            },
+            error: function(err){
+                console.log(err.responseJSON);
+                if (err.status === 422) {
+                    // Handle validation errors
+                }else{
+                    iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
+                }
+            }
+        });
+    }
     </script>
 @endpush

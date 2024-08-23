@@ -49,7 +49,7 @@ Auth::routes();
 Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'permission']], function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('/profile', [HomeController::class, 'profile'])->name('users.profile');
-
+    include('shifat.php');
 
     Route::resources([
         'roles' => RoleController::class,
