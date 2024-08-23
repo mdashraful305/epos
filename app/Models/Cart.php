@@ -38,8 +38,13 @@ class Cart extends Model
     {
         return $this->belongsTo(User::class, 'added_by');
     }
-    public static function CartTotal($customer_id)
+    public static function CartSubTotal($customer_id)
     {
-        return Cart::where('customer_id', $customer_id)->sum('price');
+        $sum=Cart::where('customer_id', $customer_id)->sum('price');
+        if($sum){
+            return $sum;
+        }else{
+            return 0;
+        }
     }
 }

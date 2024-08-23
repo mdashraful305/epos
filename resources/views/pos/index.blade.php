@@ -204,8 +204,7 @@
         $("#shipping").keyup(function (e) {
             calculateTotal();
         });
-
-        $("#clear").click(function (e) {
+        function clear(){
             $("#sub-total").val(0);
             $("#discount").val(0);
             $("#tax").val(0);
@@ -213,11 +212,16 @@
             $("#total").val(0);
 
             $('.selected-product-column').html('');
+        }
+
+        $("#clear").click(function (e) {
+            clear();
         });
 
 
 
         $(document).ready(function() {
+            clear();
         var clickCounter = 0;
         var maxClicks = 3; // Number of clicks to show the modal
         var modalShown = false;
@@ -261,7 +265,6 @@
                     }
                 },
                 error: function(err){
-                    console.log(err.responseJSON);
                     if (err.status === 422) {
                         // Handle validation errors
                     }else{
@@ -301,7 +304,9 @@
         });
 
         $select2.on('select2:select', function (e) {
-
+            var data = e.params.data;
+            clear();
+            loadCart(data.id);
         });
     });
     let page = 1;
@@ -408,7 +413,33 @@
         var subcategory_id = $(this).val();
         loadProducts($('#category_id').val(),subcategory_id,null);
     });
+    function loadCart(id){
+        $.ajax({
+            type: "GET",
+            url: "{{ route('pos.load-cart') }}",
+            data:{
+                customer_id:id,
+                _token: "{{ csrf_token() }}",
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status) {
 
+                    $('.selected-product-column').html(response.data);
+                    $("#sub-total").val(response.subtotal);
+                }else{
+                    iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
+                }
+            },
+            error: function(err){
+                if (err.status === 422) {
+                    // Handle validation errors
+                }else{
+                    iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
+                }
+            }
+        });
+    }
 
     // Add to cart
     function addToCart(id,price){
@@ -435,7 +466,34 @@
                 }
             },
             error: function(err){
-                console.log(err.responseJSON);
+                if (err.status === 422) {
+                    // Handle validation errors
+                }else{
+                    iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
+                }
+            }
+        });
+    }
+
+    function removeFromCart(id){
+        $.ajax({
+            type: "POST",
+            url: "{{ route('pos.remove-cart-item') }}",
+            data: {
+                product_id: id??null,
+                _token: "{{ csrf_token() }}",
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status) {
+                    iziToast.success({title: 'Success',timeout: 1500,message: response.message,position: 'topRight'});
+                    $('.selected-product-column').html(response.data);
+                    $("#sub-total").val(response.subtotal);
+                }else{
+                    iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
+                }
+            },
+            error: function(err){
                 if (err.status === 422) {
                     // Handle validation errors
                 }else{
