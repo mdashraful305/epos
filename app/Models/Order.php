@@ -21,4 +21,8 @@ class Order extends Model
     {
         return $this->belongsToMany(Cart::class, 'cart_order')->withTimestamps();
     }
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
 }

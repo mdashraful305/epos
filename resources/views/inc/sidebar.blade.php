@@ -14,10 +14,15 @@
             <li><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
           </ul>
         </li>
+        @can(['index-order'])
+        <li>
+            <a class="nav-link {{ Route::is('orders.index')  ? 'active' : '' }}" href="{{ route('orders.index') }}"><i class="fas fa-shopping-basket"></i> <span>Order List</span></a>
+        </li>
+        @endcan
         @can(['index-categorie', 'index-categorie', 'index-product'])
             <li class="menu-header">Product Management</li>
             <li class="dropdown {{Route::is('products.*') || Route::is('categories.*') ||  Route::is('subcategories.*') ? 'active' : '' }}">
-            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-shopping-basket"></i> <span>Product</span></a>
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i> <span>Product</span></a>
             <ul class="dropdown-menu">
                 @can('create-categorie')
                 <li class="{{ Route::is('products.create')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('products.create') }}">Product Create</a></li>
@@ -62,7 +67,17 @@
             </ul>
             </li>
         @endcan
-
+        @can('index-expense')
+            <li class="menu-header">Payroll  Management</li>
+            <li class="dropdown {{Route::is('expenses.*') ? 'active' : '' }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-money-bill-wave"></i> <span>Expense</span></a>
+            <ul class="dropdown-menu">
+                @can('index-expense')
+                <li class="{{ Route::is('expenses.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('expenses.index') }}">Expense List</a></li>
+                @endcan
+            </ul>
+            </li>
+        @endcan
         @can(['index-user', 'index-role', 'index-permission'])
             <li class="menu-header">User Management</li>
             <li class="dropdown {{ Route::is('users.*') || Route::is('roles.*')||Route::is('permissions.*') ? 'active' : '' }}">

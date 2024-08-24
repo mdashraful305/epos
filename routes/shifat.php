@@ -10,7 +10,7 @@ Route::group(['as'=> 'pos.', 'prefix' => 'pos'],function (){
     Route::post('/remove-cart-item', [PosController::class, 'removeCartItem'])->name('remove-cart-item');
 });
 
-Route::group(['as'=> 'order.', 'prefix' => 'order'],function (){
+Route::group(['as'=> 'orders.', 'prefix' => 'orders'],function (){
     Route::get('/', [OrderController::class, 'index'])->name('index');
     Route::get('create', [OrderController::class, 'create'])->name('create');
     Route::post('store', [OrderController::class, 'store'])->name('store');
