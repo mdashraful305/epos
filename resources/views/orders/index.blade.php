@@ -18,7 +18,7 @@
                   <h4>Orders List</h4>
                   <div class="card-header-form">
                     @can('create-product')
-                    <a href="{{ route('stores.create') }}" class="btn btn-success btn-sm my-2" ><i class="bi bi-plus-circle"></i> +Add New Category</a>
+                    <a href="{{ route('pos.index') }}" class="btn btn-success btn-sm my-2" ><i class="bi bi-plus-circle"></i> +Add New Category</a>
                     @endcan
                   </div>
                 </div>

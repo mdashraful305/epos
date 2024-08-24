@@ -85,7 +85,7 @@ class PosController extends Controller
             $html .= ' <div class="quantity-selector d-flex align-items-center justify-content-between"><i
                         class="fa-solid fa-minus stepper-icon"
                         onclick="this.parentNode.querySelector(\'input[type=number]\').stepDown()"></i>';
-            $html .= ' <input type="number" class="form-control text-center quantity-input px-1" value="'.$item->quantity.'" min="1" max="10">
+            $html .= ' <input type="number" class="form-control text-center quantity-input px-1" data-id="'.$item->id.'" value="'.$item->quantity.'" min="1" max="10">
                         <i class="fa-solid fa-plus stepper-icon" onclick="this.parentNode.querySelector(\'input[type=number]\').stepUp()"></i></div>';
             $html .= ' </div>';
             $html .= '<div class="col-md-2"><button class="remove-btn" onclick="removeFromCart('.$item->id.')"><i
@@ -102,6 +102,16 @@ class PosController extends Controller
         $product = Product::find($request->product_id);
         if($request->customer_id==null){
             return response()->json(['status' => false,'message'=>'Please Select Customer']);
+        }
+        //check product already added or not
+        $cart=Cart::where('product_id',$product->id)->where('customer_id',$request->customer_id)->where('status','pending')->first();
+        if($cart){
+            $cart->quantity=$cart->quantity+$request->quantity;
+            $cart->total=$cart->price*$cart->quantity;
+            $cart->save();
+            $html=$this->cartDetails($request->customer_id);
+            $subtotal=Cart::CartSubTotal($request->customer_id);
+            return response()->json(['status' => true,'message'=>'Product Added Successflly', 'data' => $html,'subtotal'=>$subtotal]);
         }
         $data=[
             'product_id'=>$product->id,

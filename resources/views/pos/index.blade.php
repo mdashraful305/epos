@@ -96,7 +96,7 @@
                 </div>
             </div>
             </div>
-        <form class="" action="{{ route('order.store') }}" method="POST" id="order-form">
+        <form class="" action="{{ route('orders.store') }}" method="POST" id="order-form">
 
             <div class="mt-5">
                 <div class="mb-1 row">
