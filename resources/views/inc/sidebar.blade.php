@@ -44,7 +44,9 @@
                 <li class="{{ Route::is('stores.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('stores.index') }}">Store List</a></li>
                 @endcan
                 @can('show-store')
+                @isset(Auth::user()->store)
                 <li class="{{ Route::is('stores.show')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('stores.show', Auth::user()->store->id) }}">Store Profile</a></li>
+                @endisset
                 @endcan
             </ul>
             </li>

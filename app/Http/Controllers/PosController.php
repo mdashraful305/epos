@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Customer;
@@ -17,7 +18,6 @@ class PosController extends Controller
         $categories = Category::where('store_id', auth()->user()->store_id)->get();
         return view('pos.index', compact('categories'));
     }
-
 
     public function getSubCategories(Request $request)
     {
@@ -107,6 +107,7 @@ class PosController extends Controller
             'product_id'=>$product->id,
             'quantity'=>$request->quantity,
             'price'=>$product->discounted_price,
+            'total'=>$product->discounted_price*$request->quantity,
             'added_by'=>auth()->id(),
             'customer_id'=>$request->customer_id,
             'store_id'=>auth()->user()->store_id,
@@ -125,6 +126,7 @@ class PosController extends Controller
         $cart=Cart::find($request->product_id);
         $cart->delete();
         $html=$this->cartDetails($cart->customer_id);
-        return response()->json(['status' => true,'message'=>'Product Removed Successflly', 'data' => $html]);
+        $subtotal=Cart::CartSubTotal($cart->customer_id);
+        return response()->json(['status' => true,'message'=>'Product Removed Successflly', 'data' => $html,'subtotal'=>$subtotal]);
   }
 }

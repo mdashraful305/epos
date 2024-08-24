@@ -13,6 +13,7 @@ class Cart extends Model
         'product_id',
         'quantity',
         'price',
+        'total',
         'added_by',
         'customer_id',
         'store_id',
@@ -38,9 +39,14 @@ class Cart extends Model
     {
         return $this->belongsTo(User::class, 'added_by');
     }
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'cart_order')
+                    ->withTimestamps();
+    }
     public static function CartSubTotal($customer_id)
     {
-        $sum=Cart::where('customer_id', $customer_id)->sum('price');
+        $sum=Cart::where(['customer_id'=> $customer_id,'status'=>'pending'])->sum('total');
         if($sum){
             return $sum;
         }else{

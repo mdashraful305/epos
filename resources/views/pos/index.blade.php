@@ -29,13 +29,12 @@
       </div>
     </div>
 
-
     <div class="row" >
         <div class="col-md-8">
             <div class="card">
                 <img class="card-img-top" src="holder.js/100x180/" alt="">
                 <div class="card-body">
-                    <form class="">
+
                         <div class="form-row">
                             <div class="col">
                                 <input type="text" class="form-control" id="category_search" placeholder="Search By Product Name / SKU ">
@@ -58,7 +57,7 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+
 
                     <section class="section-products">
                         <div class="container product-wrapper">
@@ -97,45 +96,47 @@
                 </div>
             </div>
             </div>
+        <form class="" action="{{ route('order.store') }}" method="POST" id="order-form">
+
             <div class="mt-5">
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Sub Total</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" id="sub-total" value="0" readonly>
+                        <input type="number" class="form-control" name="sub-total" id="sub-total" value="0" readonly>
                     </div>
                 </div>
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Discount</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" id="discount" value="0" placeholder="0">
+                        <input type="number" class="form-control" name="discount" id="discount" value="0" placeholder="0">
                     </div>
                 </div>
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Tax</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" id="tax" value="0" placeholder="0">
+                        <input type="number" class="form-control" name="tax" id="tax" value="0" placeholder="0">
                     </div>
                 </div>
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Shipping</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" id="shipping" value="0" placeholder="0">
+                        <input type="number" class="form-control" name="shipping_charge" id="shipping" value="0" placeholder="0">
                     </div>
                 </div>
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Total</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" id="total" value="0" readonly>
+                        <input type="number" class="form-control" name="total_amount" id="total" value="0" readonly>
                     </div>
                 </div>
                 <div class="text-center my-3">
                     <button class="btn btn-danger btn-lg" id="clear"><b>Clear</b></button>
                     <button class="btn btn-info btn-lg"><b>Hold</b></button>
-                    <button class="btn btn-success btn-lg"><b>Place Order</b></button>
+                    <button type="submit" class="btn btn-success btn-lg"><b>Place Order</b></button>
 
                 </div>
             </div>
-
+        </form>
 
 
         </div>
@@ -502,5 +503,40 @@
             }
         });
     }
+
+
+    $(document).ready(function () {
+        $('#order-form').on('submit', function(e){
+            e.preventDefault();
+            var formData = new FormData(this);
+            var customer_id = $('#customer_select').val();
+            formData.append('customer_id', customer_id);
+            $.ajax({
+                url: $(this).attr('action'),
+                method: $(this).attr('method'),
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data){
+                    console.log(data);
+                    if(data.status){
+                        iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
+                        clear();
+                        $('#customer_select').val(null).trigger('change');
+                    }else{
+                        iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
+                    }
+                },
+                error: function(err){
+                    if (err.status === 422) {
+                        // Handle validation errors
+                    }else{
+                        iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
+                    }
+                }
+            });
+        });
+    });
     </script>
 @endpush
