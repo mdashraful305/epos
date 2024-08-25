@@ -65,6 +65,7 @@ class ProductController extends Controller
             'stock' => 'required',
             'sku' => 'required',
             'status' => 'required',
+            'unit'=>'required',
         ]);
 
         try{
@@ -84,11 +85,14 @@ class ProductController extends Controller
                 'category_id' => $request->category_id,
                 'price' => $request->price,
                 'original_price' => $request->original_price,
-                'discounted_price' => $request->discounted_price??null,
+                'discounted_price' => $request->discounted_price?? $request->original_price,
                 'stock' => $request->stock,
                 'sku' => $request->sku,
                 'status' => $request->status,
                 'subcategory_id' => $request->subcategory_id??null,
+                'unit' => $request->unit??null,
+                'discount_type' => $request->discount_type??null,
+                'discount_value' => $request->discount_value??null,
             ]);
             return redirect()->route('products.index')->with('success', 'Product created successfully');
         } catch(\Exception $e){
@@ -114,6 +118,7 @@ class ProductController extends Controller
             'stock' => 'required',
             'sku' => 'required',
             'status' => 'required',
+            'unit'=>'required',
         ]);
 
         try{
@@ -130,7 +135,7 @@ class ProductController extends Controller
             } else {
                 $image_path = $product->image;
             }
-
+            
             $product->update([
                 'name' => $request->name,
                 'image' => $image_path,
@@ -143,6 +148,9 @@ class ProductController extends Controller
                 'sku' => $request->sku,
                 'status' => $request->status,
                 'subcategory_id' => $request->subcategory_id??null,
+                'unit' => $request->unit??null,
+                'discount_type' => $request->discount_type??null,
+                'discount_value' => $request->discount_value??null,
             ]);
 
             return redirect()->route('products.index')->with('success', 'Product updated successfully');

@@ -74,7 +74,7 @@
                 {data: 'name', name: 'name'},
                 {data: 'image', name: 'image', orderable: false, searchable: false},
                 {data: 'category', name: 'category'},
-                {data: 'price', name: 'price', orderable: false, searchable: false},
+                {data: 'discounted_price', name: 'price', orderable: false, searchable: false},
                 {data: 'stock', name: 'stock', orderable: false, searchable: false},
                 {data: 'status', name: 'status', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},

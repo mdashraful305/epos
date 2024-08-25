@@ -66,14 +66,14 @@
                                                     <div class="input-group mb-3">
                                                         <div class="input-group-prepend">
                                                             <div class="form-group">
-                                                                <select class="form-control" name="" id="discount_type" disabled>
+                                                                <select class="form-control" name="discount_type" id="discount_type" disabled>
                                                                     <option value="">Select Type</option>
                                                                     <option value="percentage">Percentage</option>
                                                                     <option value="flat">Flat</option>
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <input type="number" class="form-control" id="discount_value" placeholder="Enter Value" disabled value="{{ old('discount_value') }}">
+                                                        <input type="number" class="form-control" name="discount_value" id="discount_value" placeholder="Enter Value" disabled value="{{ old('discount_value') }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -87,6 +87,12 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <div class="form-group">
+                                                    <label for="unit">Unit <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="unit" id="unit" placeholder="Enter Unit ( Like: Pc,Kg)" value="{{ old('unit') }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
                                                     <label for="stock">Stock <span class="text-danger">*</span></label>
                                                     <input type="number" class="form-control" name="stock" id="stock" placeholder="Enter Stock" value="{{ old('stock') }}" required>
                                                 </div>
@@ -97,18 +103,6 @@
                                                     <input type="text" class="form-control" name="sku" id="sku" placeholder="Enter SKU" value="{{ old('sku') }}" required>
                                                 </div>
                                             </div>
-                                            {{-- <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label for="sku">Tax</label>
-                                                    <div class="input-group mb-3">
-                                                        <input type="text" class="form-control" name="sku"
-                                                            id="sku" placeholder="Enter Tax Percentage">
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">%</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> --}}
                                         </div>
                                     </div>
                                 </div>
@@ -243,6 +237,9 @@
                     discounted_price = price - (price * discount_value / 100);
                 }else if(discount_type == 'flat'){
                     discounted_price = price - discount_value;
+                }else{
+                    discounted_price = price;
+                    $("#discount_value").val('');
                 }
                 $("#discounted_price").val(discounted_price);
             });
@@ -256,6 +253,9 @@
                     discounted_price = price - (price * discount_value / 100);
                 }else if(discount_type == 'flat'){
                     discounted_price = price - discount_value;
+                }else{
+                    discounted_price = price;
+                    $("#discount_value").val('');
                 }
                 $("#discounted_price").val(discounted_price);
 
