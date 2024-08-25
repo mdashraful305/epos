@@ -16,8 +16,9 @@
     <a href="{{ route('pos.index') }}" class="btn btn-outline-danger text-white mr-2">Pos</a>
     <a href="{{ route('clear') }}" class="btn btn-outline-danger text-white mr-1">Cache Clear</a>
     <a href="{{ route('route') }}" class="btn btn-outline-danger text-white">Generate Route</a>
+   
     <ul class="navbar-nav navbar-right">
-      <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle beep"><i class="far fa-envelope"></i></a>
+      {{-- <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle beep"><i class="far fa-envelope"></i></a>
         <div class="dropdown-menu dropdown-list dropdown-menu-right">
           <div class="dropdown-header">Messages
             <div class="float-right">
@@ -65,7 +66,7 @@
             <a href="#">View All <i class="fas fa-chevron-right"></i></a>
           </div>
         </div>
-      </li>
+      </li> --}}
       <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
         <img alt="image" src="{{ asset( Auth::user()->store?->image ?? 'backend/assets/img/avatar/avatar-1.png') }}" class="rounded-circle mr-1">
         <div class="d-sm-none d-lg-inline-block">Hi, {{ Auth::user()->name }}</div></a>
