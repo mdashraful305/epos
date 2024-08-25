@@ -21,6 +21,9 @@ class Product extends Model
         'sku',
         'status',
         'subcategory_id',
+        'unit',
+        'discount_type',
+        'discount_value',
     ];
 
     public function store()
