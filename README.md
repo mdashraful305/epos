@@ -1,4 +1,4 @@
-# Project Name
+# Epos
 
 Laravel Multi Authentication
 
