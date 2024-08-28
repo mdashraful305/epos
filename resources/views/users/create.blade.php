@@ -1,5 +1,5 @@
 @extends('layouts.back')
-@section('title', 'Add New User')
+@section('title') Manage User @endsection
 @push('styles')
 @endpush
 @section('content')
@@ -8,7 +8,7 @@
       <h1>Manage User</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-        <div class="breadcrumb-item">Users</div>
+        <div class="breadcrumb-item">User</div>
       </div>
     </div>
     <div class="section-body">

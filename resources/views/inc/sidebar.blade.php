@@ -78,6 +78,17 @@
             </ul>
             </li>
         @endcan
+        @can(['index-employee'])
+        <li class="menu-header">Employee Management</li>
+        <li class="dropdown {{ Route::is('employees.*')? 'active' : '' }}">
+        <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="far fa-user"></i> <span>Employee</span></a>
+        <ul class="dropdown-menu">
+            @can('index-employee')
+            <li class="{{ Route::is('employees.*')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('employees.index') }}">Employee List</a></li>
+            @endcan
+        </ul>
+        </li>
+    @endcan
         @can(['index-user', 'index-role', 'index-permission'])
             <li class="menu-header">User Management</li>
             <li class="dropdown {{ Route::is('users.*') || Route::is('roles.*')||Route::is('permissions.*') ? 'active' : '' }}">

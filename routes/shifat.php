@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PosController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OrderController;
 
 
 Route::group(['as'=> 'pos.', 'prefix' => 'pos'],function (){
@@ -19,3 +20,15 @@ Route::group(['as'=> 'orders.', 'prefix' => 'orders'],function (){
     Route::post('update/{id}', [OrderController::class, 'update'])->name('update');
     Route::delete('destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
 });
+
+Route::group(['as'=>'employees.', 'prefix'=>'employees'],function(){
+    Route::get('/', [EmployeeController::class, 'index'])->name('index');
+    Route::get('create', [EmployeeController::class, 'create'])->name('create');
+    Route::post('store', [EmployeeController::class, 'store'])->name('store');
+    Route::get('edit/{id}', [EmployeeController::class, 'edit'])->name('edit');
+    Route::post('update/{id}', [EmployeeController::class, 'update'])->name('update');
+    Route::delete('destroy/{id}', [EmployeeController::class, 'destroy'])->name('destroy');
+
+});
+
+Route::delete('users/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
