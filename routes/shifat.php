@@ -19,6 +19,7 @@ Route::group(['as'=> 'orders.', 'prefix' => 'orders'],function (){
     Route::get('edit/{id}', [OrderController::class, 'edit'])->name('edit');
     Route::post('update/{id}', [OrderController::class, 'update'])->name('update');
     Route::delete('destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
+    Route::post('products', [OrderController::class, 'getOrderData'])->name('getOrderData');
 });
 
 Route::group(['as'=>'employees.', 'prefix'=>'employees'],function(){

@@ -50,6 +50,7 @@
 
   </div>
   @stack('modals')
+
   <!-- General JS Scripts -->
   <script src="{{ asset('backend/assets/modules/jquery.min.js')}}"></script>
   <script src="{{ asset('backend/assets/modules/popper.js')}}"></script>

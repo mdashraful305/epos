@@ -37,7 +37,7 @@ class OrderController extends Controller
                         })
                         ->addColumn('action', function($row){
                             $btn = '<div class="d-flex">';
-                            $btn .= '<button class="btn btn-primary btn edit mr-2" data-id="'.$row['id'].'"  onclick="edit('.$row['id'].')"><i class="fa-solid fa-pencil"></i></button>';
+                            $btn .= '<a href="'.route('orders.edit',$row['id']).'" class="btn btn-primary btn edit mr-2 text-white"><i class="fa-solid fa-pencil"></i></a>';
                             $btn .= '<button class="btn btn-danger btn delete" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="fa-solid fa-trash"></i></button>';
                             $btn .= '</div>';
                             return $btn;
@@ -101,9 +101,10 @@ class OrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Order $order)
+    public function edit(Order $order,$id)
     {
-        //
+        $order = Order::find($id);
+        return view('orders.edit',compact('order'));
     }
 
     /**
@@ -120,5 +121,30 @@ class OrderController extends Controller
     public function destroy(Order $order)
     {
         //
+    }
+
+    public function getOrderData(Request $request){
+        $html='';
+        $i=1;
+        $total=0;
+        $order=Order::find($request->order_id);
+        foreach($order->carts as $item){
+            $html.=' <tr>';
+            $html.='    <td>'. $i++ .'</td>';
+            $html.='    <td>';
+            $html.='        <img src="'. asset($item->product->image) .'" alt="'. $item->product->name .'" width="50">';
+            $html.='    </td>';
+            $html.='    <td>'. $item->product->name .'</td>';
+            $html.='     <td>'. $item->quantity .'</td>';
+            $html.='     <td>'. number_format($item->price,2) .'</td>';
+            $html.='     <td>'. number_format($item->total,2) .'</td>';
+            $html.='     <td>';
+            $html.='         <button class="btn btn-danger btn-sm" onclick="removeFromCart('. $item->id .')"><i class="fas fa-trash"></i></button>';
+            $html.='     </td>';
+            $html.=' </tr>';
+            $total+=$item->total;
+        }
+
+        return response()->json(['status' => true, 'data' => $html, 'total' => number_format($total,2)]);
     }
 }
