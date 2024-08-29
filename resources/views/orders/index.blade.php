@@ -18,7 +18,7 @@
                   <h4>Orders List</h4>
                   <div class="card-header-form">
                     @can('create-product')
-                    <a href="{{ route('pos.index') }}" class="btn btn-success btn-sm my-2" ><i class="bi bi-plus-circle"></i> +Add New Category</a>
+                    <a href="{{ route('pos.index') }}" class="btn btn-success btn-sm my-2" ><i class="bi bi-plus-circle"></i> Add New Order</a>
                     @endcan
                   </div>
                 </div>
@@ -72,6 +72,36 @@
 
         });
     });
-
+    function checkDelete(id) {
+        var token = $("meta[name='csrf-token']").attr("content");
+        var url = "{{ url('/') }}" + '/orders/destroy/' + id;
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this data!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    type: "DELETE",
+                    url: url,
+                    data: {"_token": token},
+                    success: function (data) {
+                        if(data.status){
+                            iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
+                            $('#data-table').DataTable().ajax.reload();
+                        } else {
+                            iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
+                        }
+                    },
+                    error: function(err){
+                        iziToast.error({title: 'Error',timeout: 1500,message: 'Something Went Wrong',position: 'topRight'});
+                    }
+                });
+            }
+        });
+    }
 </script>
 @endpush

@@ -34,11 +34,7 @@
                 <div class="card">
                     <div class="card-header">
                       <h4>Order Info</h4>
-                      <div class="card-header-form">
-                        <div class="card-header-form">
-                            <a href="{{ route('orders.index') }}" class="btn btn-primary btn-sm">&larr; Back</a>
-                        </div>
-                      </div>
+
                     </div>
                     <div class="card-body">
                         <table class="table">
