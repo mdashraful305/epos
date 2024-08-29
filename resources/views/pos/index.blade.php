@@ -108,13 +108,13 @@
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Discount</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" name="discount" id="discount" value="0" placeholder="0">
+                        <input type="text" class="form-control text-right" name="discount" id="discount" value="0" placeholder="0 " data-toggle="tooltip" data-placement="top" title="Enter Percentage (0.5% or Any ) or Any Value (2,5,10)">
                     </div>
                 </div>
                 <div class="mb-1 row">
                     <label class="col-sm-3 col-form-label">Tax</label>
                     <div class="col-sm-9 text-right">
-                        <input type="number" class="form-control" name="tax" id="tax" value="0" placeholder="0">
+                        <input type="text" class="form-control text-right" name="tax" id="tax" value="0" placeholder="0" data-toggle="tooltip" data-placement="top" title="Enter Percentage (0.5% or Any ) or Any Value (2,5,10)">
                     </div>
                 </div>
                 <div class="mb-1 row">
@@ -190,8 +190,21 @@
     <script>
         function calculateTotal(){
             let subTotal = parseFloat($("#sub-total").val());
-            let discount = parseFloat($("#discount").val());
-            let tax = parseFloat($("#tax").val());
+            let discount = $("#discount").val();
+            if(discount.includes('%')){
+                discount = parseFloat(discount.replace('%',''));
+                discount = (subTotal * discount) / 100;
+            }else{
+                discount = parseFloat(discount);
+            }
+            let tax = $("#tax").val();
+            if(tax.includes('%')){
+                tax = parseFloat(tax.replace('%',''));
+                tax = (subTotal * tax) / 100;
+            }else{
+                tax = parseFloat(tax);
+            }
+
             let shipping = parseFloat($("#shipping").val());
             let total = subTotal - discount + tax + shipping;
             $("#total").val(total);
@@ -428,6 +441,7 @@
 
                     $('.selected-product-column').html(response.data);
                     $("#sub-total").val(response.subtotal);
+                   calculateTotal();
                 }else{
                     iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
                 }
@@ -461,6 +475,7 @@
                     iziToast.success({title: 'Success',timeout: 1500,message: response.message,position: 'topRight'});
                     $('.selected-product-column').html(response.data);
                     $("#sub-total").val(response.subtotal);
+                    calculateTotal();
 
                 }else{
                     iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
@@ -490,6 +505,7 @@
                     iziToast.success({title: 'Success',timeout: 1500,message: response.message,position: 'topRight'});
                     $('.selected-product-column').html(response.data);
                     $("#sub-total").val(response.subtotal);
+                    calculateTotal();
                 }else{
                     iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
                 }

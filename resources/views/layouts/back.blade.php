@@ -33,7 +33,7 @@
 
 </head>
 
-<body>
+<body @if(Route::is('pos*')) class="sidebar-mini" @endif>
   <div id="app">
     <div class="main-wrapper main-wrapper-1">
         <div class="navbar-bg"></div>
@@ -50,6 +50,7 @@
 
   </div>
   @stack('modals')
+
   <!-- General JS Scripts -->
   <script src="{{ asset('backend/assets/modules/jquery.min.js')}}"></script>
   <script src="{{ asset('backend/assets/modules/popper.js')}}"></script>

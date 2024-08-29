@@ -133,6 +133,11 @@ class PosController extends Controller
   }
 
   public function removeCartItem(Request $request){
+       if($request->has('cart_id')){
+            $cart=Cart::find($request->cart_id);
+            $cart->delete();
+            return response()->json(['status' => true,'message'=>'Product Removed Successflly']);
+       }
         $cart=Cart::find($request->product_id);
         $cart->delete();
         $html=$this->cartDetails($cart->customer_id);
