@@ -38,7 +38,8 @@ class OrderController extends Controller
                         ->addColumn('action', function($row){
                             $btn = '<div class="d-flex">';
                             $btn .= '<a href="'.route('orders.edit',$row['id']).'" class="btn btn-primary btn edit mr-2 text-white"><i class="fa-solid fa-pencil"></i></a>';
-                            $btn .= '<button class="btn btn-danger btn delete" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="fa-solid fa-trash"></i></button>';
+                            $btn .= '<button class="btn btn-danger btn delete mr-2" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="fa-solid fa-trash"></i></button>';
+                            $btn.='<button class="btn btn-info btn" onclick="printReceipt('.$row['id'].')"><i class="fa-solid fa-print"></i></button>';
                             $btn .= '</div>';
                             return $btn;
                         })
@@ -80,13 +81,13 @@ class OrderController extends Controller
 
             $order->carts()->attach($cartItems);
             Cart::whereIn('id', $cartItems)->update(['status' => 'ordered']);
+            $receiptView = view('pos.receipt',compact('order'))->render();
             DB::commit();
         }catch(\Exception $e){
             DB::rollBack();
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
-
-        return response()->json(['status' => true, 'message' => 'Order created successfully']);
+        return response()->json(['status' => true, 'message' => 'Order created successfully', 'receipt' => $receiptView]);
 
     }
 
@@ -141,12 +142,18 @@ class OrderController extends Controller
             $html.='     <td>'. number_format($item->price,2) .'</td>';
             $html.='     <td>'. number_format($item->total,2) .'</td>';
             $html.='     <td>';
-            $html.='         <button class="btn btn-danger btn-sm" onclick="removeFromCart('. $item->id .')"><i class="fas fa-trash"></i></button>';
+            $html.=($order->carts->count()>1)?'<button class="btn btn-danger btn-sm" onclick="removeFromCart('. $item->id .')"><i class="fas fa-trash"></i></button>':'';
             $html.='     </td>';
             $html.=' </tr>';
             $total+=$item->total;
         }
 
         return response()->json(['status' => true, 'data' => $html, 'total' => number_format($total,2)]);
+    }
+
+    public function receipt(Request $request){
+        $order = Order::find($request->id);
+        $receiptView = view('pos.receipt',compact('order'))->render();
+        return response()->json(['status' => true, 'receipt' => $receiptView]);
     }
 }

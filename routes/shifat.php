@@ -20,6 +20,7 @@ Route::group(['as'=> 'orders.', 'prefix' => 'orders'],function (){
     Route::post('update/{id}', [OrderController::class, 'update'])->name('update');
     Route::delete('destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
     Route::post('products', [OrderController::class, 'getOrderData'])->name('getOrderData');
+    Route::post('receipt', [OrderController::class, 'receipt'])->name('receipt');
 });
 
 Route::group(['as'=>'employees.', 'prefix'=>'employees'],function(){

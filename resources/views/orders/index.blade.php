@@ -48,11 +48,37 @@
   </section>
 
 @endsection
+@push('modals')
+<div id='printable_div_id'>
 
+</div>
+
+<div class="modal fade" id="receipt" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Receipt</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+
+            <div class="modal-body">
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submit" onclick="printDiv('printable_div_id')">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endpush
 @push('scripts')
 <script type="text/javascript">
   $(document).ready(function() {
-              var table = $('#data-table').DataTable({
+        var table = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
             bAutoWidth:false,
@@ -103,5 +129,26 @@
             }
         });
     }
+
+    function printReceipt(id) {
+        $.ajax({
+            type: "POST",
+            url: "{{ route('orders.receipt') }}",
+            data: {id: id,
+                _token:"{{ csrf_token() }}"
+            },
+            dataType: "json",
+            success: function (response) {
+                if(response.status){
+                    $('#receipt .modal-body').html(response.receipt);
+                    $('#printable_div_id').html(response.receipt);
+                    $('#receipt').modal('show');
+                } else {
+                    iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
+                }
+            }
+        });
+    }
+
 </script>
 @endpush
