@@ -21,6 +21,10 @@ class Store extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'id', 'store_id');
-   
+
+    }
+    public function suppliers()
+    {
+        return $this->hasMany(Supplier::class);
     }
 }
