@@ -39,6 +39,7 @@ class OrderController extends Controller
                             $btn = '<div class="d-flex">';
                             $btn .= '<a href="'.route('orders.edit',$row['id']).'" class="btn btn-primary btn edit mr-2 text-white"><i class="fa-solid fa-pencil"></i></a>';
                             $btn .= '<button class="btn btn-danger btn delete" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="fa-solid fa-trash"></i></button>';
+                            $btn .= '<button class="btn btn-danger btn delete ml-2" data-id="'.$row['id'].'"  onclick="checkDelete('.$row['id'].')"><i class="fa-solid fa-eye"></i></button>';
                             $btn .= '</div>';
                             return $btn;
                         })

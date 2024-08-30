@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Expense;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\SubCategory;
@@ -94,6 +96,13 @@ class ProductController extends Controller
                 'discount_type' => $request->discount_type??null,
                 'discount_value' => $request->discount_value??null,
             ]);
+            Expense::create([
+                'expense_date' => Carbon::now(),
+                'expense_category' =>"Product Buy",
+                'expense_amount' => $request->original_price * $request->stock,
+                'store_id' => auth()->user()->store_id,
+                'slug'=>slug($request->name)
+            ]);
             return redirect()->route('products.index')->with('success', 'Product created successfully');
         } catch(\Exception $e){
             return redirect()->back()->with('error', $e->getMessage());
@@ -135,7 +144,7 @@ class ProductController extends Controller
             } else {
                 $image_path = $product->image;
             }
-            
+
             $product->update([
                 'name' => $request->name,
                 'image' => $image_path,

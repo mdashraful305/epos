@@ -17,7 +17,7 @@ class CreateExpensesTable extends Migration
             $table->string('slug'); // Slug
             $table->date('expense_date'); // Expense Date: The date when the expense was incurred
             $table->string('expense_category'); // Expense Category: The category of the expense
-            $table->text('expense_description'); // Expense Description: A brief description of the expense
+            $table->text('expense_description')->nullable(); // Expense Description: A brief description of the expense
             $table->decimal('expense_amount', 10, 2); // Expense Amount: The amount when the expense was incurred
             $table->unsignedBigInteger('store_id'); // Foreign key to stores table
             $table->foreign('store_id')->references('id')->on('stores')->onDelete('cascade')->onUpdate('cascade'); // Foreign key constraint
