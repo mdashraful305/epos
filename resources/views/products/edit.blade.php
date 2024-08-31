@@ -135,6 +135,15 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="supplier_id">Suppliers <span class="text-danger">*</span></label>
+                                            <select class="form-control select2" name="supplier_id" id="supplier_id" aria-label="supplier" required>
+                                                <option value="">Select Suppliers</option>
+                                                @foreach ($Suppliers as $Supplier)
+                                                    <option value="{{ $Supplier->id }}" @if($Supplier->id==$product->supplier_id) selected @endif>{{ $Supplier->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label for="image">Image <span class="text-danger">*</span></label>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" name="image" id="image" accept="image/*" @if($product->image==Null)required @endif>
@@ -258,6 +267,14 @@
                 }
                 $("#discounted_price").val(discounted_price);
 
+            });
+
+            // Supplier selection handling
+            $("#supplier_id").change(function (e) {
+                e.preventDefault();
+                var supplier_id = $(this).val();
+                // Add any additional logic for supplier selection if needed
+                console.log("Selected supplier ID: " + supplier_id);
             });
         });
     </script>

@@ -8,14 +8,15 @@ use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SubCategoryController;
-use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -134,6 +135,15 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         Route::get('edit/{id}', [ExpenseController::class, 'edit'])->name('edit');
         Route::post('update/{id}', [ExpenseController::class, 'update'])->name('update');
         Route::delete('destroy/{id}', [ExpenseController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::group(['as'=> 'suppliers.', 'prefix' => 'suppliers'], function () {
+        Route::get('/', [SupplierController::class, 'index'])->name('index');
+        Route::get('create', [SupplierController::class, 'create'])->name('create');
+        Route::post('store', [SupplierController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [SupplierController::class, 'edit'])->name('edit');
+        Route::post('update/{id}', [SupplierController::class, 'update'])->name('update');
+        Route::delete('destroy/{id}', [SupplierController::class, 'destroy'])->name('destroy');
     });
 
 

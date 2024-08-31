@@ -128,6 +128,16 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label for="supplier_id">Suppliers <span class="text-danger">*</span></label>
+                                            <select class="form-control select2" name="supplier_id" id="supplier_id" aria-label="supplier" required>
+                                                <option value="">Select Suppliers</option>
+                                                @foreach ($Suppliers as $Supplier)
+                                                    <option value="{{ $Supplier->id }}">{{ $Supplier->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label for="image">Image <span class="text-danger">*</span></label>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" name="image" id="image" accept="image/*" required>
@@ -184,82 +194,86 @@
             }
             reader.readAsDataURL(file);
         });
-    </script>
-    <script>
-        $(document).ready(function () {
-            $("#category_id").change(function (e) {
-                e.preventDefault();
-                var category_id = $(this).val();
-                $.ajax({
-                    url: "{{ route('products.subcategories') }}",
-                    type: "POST",
-                    data: {
-                        category_id: category_id,
-                        _token: "{{ csrf_token() }}",
-                    },
-                    success: function (response) {
-                        if (response.status) {
-                            if(response.data.length > 0){
-                                $("#subcategory_id").prop('disabled', false);
-                                $("#subcategory_id").html('<option value="">Select Subcategory</option>');
-                                response.data.forEach(element => {
-                                    $("#subcategory_id").append('<option value="'+element.id+'">'+element.name+'</option>');
-                                });
 
-                            }else{
-                                $("#subcategory_id").prop('disabled', true);
-                                $("#subcategory_id").html('<option value="null">No Subcategory Found</option>');
-                            }
+        $("#category_id").change(function (e) {
+            e.preventDefault();
+            var category_id = $(this).val();
+            $.ajax({
+                url: "{{ route('products.subcategories') }}",
+                type: "POST",
+                data: {
+                    category_id: category_id,
+                    _token: "{{ csrf_token() }}",
+                },
+                success: function (response) {
+                    if (response.status) {
+                        if(response.data.length > 0){
+                            $("#subcategory_id").prop('disabled', false);
+                            $("#subcategory_id").html('<option value="">Select Subcategory</option>');
+                            response.data.forEach(element => {
+                                $("#subcategory_id").append('<option value="'+element.id+'">'+element.name+'</option>');
+                            });
                         } else {
                             $("#subcategory_id").prop('disabled', true);
-                            $("#subcategory_id").html('<option value="">Select Category First</option>');
+                            $("#subcategory_id").html('<option value="null">No Subcategory Found</option>');
                         }
+                    } else {
+                        $("#subcategory_id").prop('disabled', true);
+                        $("#subcategory_id").html('<option value="">Select Category First</option>');
                     }
-                });
-
-            });
-            $("#price").keyup(function (e) {
-                e.preventDefault();
-                var price = $(this).val();
-                if(price>=0){
-                    $("#discount_type").prop('disabled', false);
-                    $("#discount_value").prop('disabled', false);
                 }
+            });
+        });
 
-            });
-            $("#discount_type").change(function (e) {
-                e.preventDefault();
-                var price = $("#price").val();
-                var discount_type = $(this).val();
-                var discount_value = $("#discount_value").val();
-                var discounted_price = 0;
-                if(discount_type == 'percentage'){
-                    discounted_price = price - (price * discount_value / 100);
-                }else if(discount_type == 'flat'){
-                    discounted_price = price - discount_value;
-                }else{
-                    discounted_price = price;
-                    $("#discount_value").val('');
-                }
-                $("#discounted_price").val(discounted_price);
-            });
-            $("#discount_value").keyup(function (e) {
-                e.preventDefault();
-                var price = $("#price").val();
-                var discount_type = $("#discount_type").val();
-                var discount_value = $(this).val();
-                var discounted_price = 0;
-                if(discount_type == 'percentage'){
-                    discounted_price = price - (price * discount_value / 100);
-                }else if(discount_type == 'flat'){
-                    discounted_price = price - discount_value;
-                }else{
-                    discounted_price = price;
-                    $("#discount_value").val('');
-                }
-                $("#discounted_price").val(discounted_price);
+        $("#price").keyup(function (e) {
+            e.preventDefault();
+            var price = $(this).val();
+            if(price >= 0){
+                $("#discount_type").prop('disabled', false);
+                $("#discount_value").prop('disabled', false);
+            }
+        });
 
-            });
+        $("#discount_type").change(function (e) {
+            e.preventDefault();
+            var price = $("#price").val();
+            var discount_type = $(this).val();
+            var discount_value = $("#discount_value").val();
+            var discounted_price = 0;
+            if(discount_type == 'percentage'){
+                discounted_price = price - (price * discount_value / 100);
+            } else if(discount_type == 'flat'){
+                discounted_price = price - discount_value;
+            } else {
+                discounted_price = price;
+                $("#discount_value").val('');
+            }
+            $("#discounted_price").val(discounted_price);
+        });
+
+        $("#discount_value").keyup(function (e) {
+            e.preventDefault();
+            var price = $("#price").val();
+            var discount_type = $("#discount_type").val();
+            var discount_value = $(this).val();
+            var discounted_price = 0;
+            if(discount_type == 'percentage'){
+                discounted_price = price - (price * discount_value / 100);
+            } else if(discount_type == 'flat'){
+                discounted_price = price - discount_value;
+            } else {
+                discounted_price = price;
+                $("#discount_value").val('');
+            }
+            $("#discounted_price").val(discounted_price);
+        });
+
+        // Supplier selection handling
+        $("#supplier_id").change(function (e) {
+            e.preventDefault();
+            var supplier_id = $(this).val();
+            // Add any additional logic for supplier selection if needed
+            console.log("Selected supplier ID: " + supplier_id);
         });
     </script>
 @endpush
