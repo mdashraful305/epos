@@ -15,6 +15,8 @@ return new class extends Migration
             $table->string('unit')->nullable();
             $table->string('discount_type')->nullable();
             $table->decimal('discount_value', 10, 2)->nullable();
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
         });
     }
 

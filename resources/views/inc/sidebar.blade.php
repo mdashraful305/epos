@@ -19,7 +19,7 @@
             <a class="nav-link {{ Route::is('orders.index')  ? 'active' : '' }}" href="{{ route('orders.index') }}"><i class="fas fa-shopping-basket"></i> <span>Order List</span></a>
         </li>
         @endcan
-        @can(['index-categorie', 'index-categorie', 'index-product'])
+        @can(['index-categorie', 'index-categorie', 'index-product', 'index-supplier'])
             <li class="menu-header">Product Management</li>
             <li class="dropdown {{Route::is('products.*') || Route::is('categories.*') ||  Route::is('subcategories.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i> <span>Product</span></a>
@@ -38,6 +38,14 @@
                 @endcan
             </ul>
             </li>
+            <li class="dropdown {{Route::is('suppliers.*') ? 'active' : '' }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa-solid fa-truck-field"></i></i> <span>Suppliers</span></a>
+                <ul class="dropdown-menu">
+                    @can('index-supplier')
+                    <li class="{{ Route::is('suppliers.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('suppliers.index') }}">Suppliers List</a></li>
+                    @endcan
+                </ul>
+                </li>
         @endcan
 
         @can(['index-categorie'])
