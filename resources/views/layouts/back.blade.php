@@ -85,14 +85,14 @@
    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
    <script>
     function printDiv(elem) {
-        var header_str = '<html><head><title>' + document.title  + '</title></head><body>';
-        var footer_str = '</body></html>';
-        var new_str = document.getElementById(elem).innerHTML;
-        var old_str = document.body.innerHTML;
-        document.body.innerHTML = header_str + new_str + footer_str;
+        let printContents = document.getElementById('receipt_body').innerHTML;
+        let originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
         window.print();
-        document.body.innerHTML = old_str;
-        $('#receipt').modal('hide');
+        document.body.innerHTML = originalContents;
+        setTimeout(function() {
+            location.reload();
+        }, 1000);
     }
    </script>
      @stack('scripts')

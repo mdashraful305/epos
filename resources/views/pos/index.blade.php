@@ -183,9 +183,6 @@
         </div>
     </div>
 </div>
-<div id='printable_div_id'>
-
-</div>
 
 <div class="modal fade" id="receipt" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -197,13 +194,13 @@
                     </button>
             </div>
 
-            <div class="modal-body">
+            <div class="modal-body" id="receipt_body">
 
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="submit" onclick="printDiv('printable_div_id')">Submit</button>
+                <button type="button" class="btn btn-primary" id="submit" onclick="printDiv('printable_div_id')">Print</button>
             </div>
         </div>
     </div>
@@ -564,7 +561,6 @@
                         clear();
                         $('#customer_select').val(null).trigger('change');
                         $('#receipt .modal-body').html(data.receipt);
-                        $('#printable_div_id').html(data.receipt);
                         $('#receipt').modal('show');
                     }else{
                         iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
