@@ -229,24 +229,25 @@
                                                     <td>
                                                         <table class="invoice-items" cellpadding="0" cellspacing="0">
 
-                                                            <tbody>
-                                                                @php
-                                                                    $total = 0;
-                                                                @endphp
-                                                                @foreach ($order->carts as $item)
+                                                                <tbody>
                                                                     @php
-                                                                        $total = $total + $item->price;
+                                                                        $total = 0;
                                                                     @endphp
-                                                                    <tr>
-                                                                        <td>{{ $item->product->name }} X {{ $item->quantity }}</td>
-                                                                        <td class="alignright">{{ $item->price }}</td>
+                                                                    @foreach ($order->carts as $item)
+                                                                        @php
+                                                                            $total = $total + ($item->price*$item->quantity);
+                                                                        @endphp
+                                                                        <tr>
+                                                                            <td>{{ $item->product->name }} X {{ $item->quantity }}</td>
+                                                                            <td class="alignright">{{ $item->price*$item->quantity }}</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    <tr class="total">
+                                                                        <td class="alignright" width="80%">Total</td>
+                                                                        <td class="alignright">{{ $total }}</td>
                                                                     </tr>
-                                                                @endforeach
-                                                                <tr class="total">
-                                                                    <td class="alignright" width="80%">Total</td>
-                                                                    <td class="alignright">{{ $total }}</td>
-                                                                </tr>
-                                                        </tbody></table>
+                                                            </tbody>
+                                                        </table>
                                                     </td>
                                                 </tr>
                                             </tbody></table>
