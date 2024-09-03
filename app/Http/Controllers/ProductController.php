@@ -185,13 +185,18 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $product = Product::find($id);
-        $path = $product->image;
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        $product->delete();
-        return response()->json(['status' => true, 'message' => 'Product deleted successfully']);
+          try{
+            $product = Product::find($id);
+            $path = $product->image;
+            if (file_exists($path)) {
+                unlink($path);
+            }
+            $product->delete();
+            return response()->json(['status' => true, 'message' => 'Product deleted successfully']);
+          }
+          catch (\Exception $e){
+            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+          }
     }
 
 

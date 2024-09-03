@@ -1,280 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Receipt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Receipt</title>
     <style>
-
-
-        /* -------------------------------------
-            BODY & CONTAINER
-        ------------------------------------- */
         body {
-            background-color: #f6f6f6;
-        }
-
-        .body-wrap {
-            background-color: #f6f6f6;
-            width: 100%;
-        }
-
-        .container {
-            display: block !important;
-            max-width: 600px !important;
-            margin: 0 auto !important;
-            /* makes it centered */
-            clear: both !important;
-        }
-
-        .content {
-            max-width: 600px;
-            margin: 0 auto;
-            display: block;
-            padding: 20px;
-        }
-
-        /* -------------------------------------
-            HEADER, FOOTER, MAIN
-        ------------------------------------- */
-        .main {
-            background: #fff;
-            border: 1px solid #e9e9e9;
-            border-radius: 3px;
-        }
-
-        .content-wrap {
-            padding: 20px;
-        }
-
-        .content-block {
-            padding: 0 0 20px;
-        }
-
-        .header {
-            width: 100%;
-            margin-bottom: 20px;
-        }
-
-        .footer {
-            width: 100%;
-            clear: both;
-            color: #999;
-            padding: 20px;
-        }
-        .footer a {
-            color: #999;
-        }
-        .footer p, .footer a, .footer unsubscribe, .footer td {
+            font-family: 'Courier New', Courier, monospace;
             font-size: 12px;
+            margin: 0;
+            padding: 0;
+            width: 300px;
+            background-color: #f7f7f7;
         }
 
-        /* -------------------------------------
-            TYPOGRAPHY
-        ------------------------------------- */
-        h1, h2, h3 {
-            font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-            color: #000;
-            margin: 40px 0 0;
-            line-height: 1.2;
-            font-weight: 400;
+        .receipt {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            border: 1px solid #000;
+            margin: auto;
+            background-color: #fff;
         }
 
-        h1 {
-            font-size: 32px;
-            font-weight: 500;
-        }
-
-        h2 {
-            font-size: 24px;
-        }
-
-        h3 {
-            font-size: 18px;
-        }
-
-        h4 {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        p, ul, ol {
-            margin-bottom: 10px;
-            font-weight: normal;
-        }
-        p li, ul li, ol li {
-            margin-left: 5px;
-            list-style-position: inside;
-        }
-
-        /* -------------------------------------
-            LINKS & BUTTONS
-        ------------------------------------- */
-        a {
-            color: #1ab394;
-            text-decoration: underline;
-        }
-
-
-
-        /* -------------------------------------
-            OTHER STYLES THAT MIGHT BE USEFUL
-        ------------------------------------- */
-        .last {
-            margin-bottom: 0;
-        }
-
-        .first {
-            margin-top: 0;
-        }
-
-        .aligncenter {
+        .receipt-header,
+        .receipt-footer {
             text-align: center;
+            margin-bottom: 10px;
         }
 
-        .alignright {
+        .receipt-header h1 {
+            font-size: 16px;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .receipt-header p {
+            margin: 5px 0;
+        }
+
+        .section-title {
+            text-align: left;
+            margin: 15px 0 5px 0;
+            font-weight: bold;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 5px;
+        }
+
+        .customer-info,
+        .payment-info {
+            margin-bottom: 10px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .info-row div {
+            flex: 1;
+        }
+
+        .receipt-body {
+            border-top: 1px dashed #000;
+            border-bottom: 1px dashed #000;
+            margin: 10px 0;
+            padding: 10px 0;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .item .name {
+            flex: 1;
+        }
+
+        .item .qty {
+            width: 50px;
             text-align: right;
         }
 
-        .alignleft {
-            text-align: left;
+        .item .price {
+            width: 60px;
+            text-align: right;
         }
 
-        .clear {
-            clear: both;
+        .total {
+            font-weight: bold;
+            margin-top: 10px;
         }
 
-
-
-        /* -------------------------------------
-            INVOICE
-            Styles for the billing table
-        ------------------------------------- */
-        .invoice {
-            margin: 40px auto;
-            text-align: left;
-            width: 80%;
-        }
-        .invoice td {
-            padding: 5px 0;
-        }
-        .invoice .invoice-items {
-            width: 100%;
-        }
-        .invoice .invoice-items td {
-            border-top: #eee 1px solid;
-        }
-        .invoice .invoice-items .total td {
-            border-top: 2px solid #333;
-            border-bottom: 2px solid #333;
-            font-weight: 700;
+        .receipt-footer p {
+            margin: 5px 0;
         }
 
-        /* -------------------------------------
-            RESPONSIVE AND MOBILE FRIENDLY STYLES
-        ------------------------------------- */
-        @media only screen and (max-width: 640px) {
-            h1, h2, h3, h4 {
-                font-weight: 600 !important;
-                margin: 20px 0 5px !important;
-            }
-
-            h1 {
-                font-size: 22px !important;
-            }
-
-            h2 {
-                font-size: 18px !important;
-            }
-
-            h3 {
-                font-size: 16px !important;
-            }
-
-            .container {
-                width: 100% !important;
-            }
-
-            .content, .content-wrap {
-                padding: 10px !important;
-            }
-
-            .invoice {
-                width: 100% !important;
-            }
+        hr {
+            border: none;
+            border-top: 1px dashed #000;
+            margin: 5px 0;
         }
     </style>
 </head>
+
 <body>
-    <table class="body-wrap">
-        <tbody><tr>
-            <td></td>
-            <td class="container" width="600">
-                <div class="content">
-                    <table class="main" width="100%" cellpadding="0" cellspacing="0">
-                        <tbody><tr>
-                            <td class="content-wrap aligncenter">
-                                <table width="100%" cellpadding="0" cellspacing="0">
-                                    <tbody><tr>
-                                        <td class="content-block">
-                                            <h2>Thanks for using our Shop</h2>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="content-block">
-                                            <table class="invoice">
-                                                <tbody><tr>
-                                                    <td>{{ $order->customer->name }}<br>Invoice #{{ $order->id }}<br>{{ date('d M Y',strtotime($order->created_at)) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table class="invoice-items" cellpadding="0" cellspacing="0">
 
-                                                            <tbody>
-                                                                @php
-                                                                    $total = 0;
-                                                                @endphp
-                                                                @foreach ($order->carts as $item)
-                                                                    @php
-                                                                        $total = $total + $item->price;
-                                                                    @endphp
-                                                                    <tr>
-                                                                        <td>{{ $item->product->name }} X {{ $item->quantity }}</td>
-                                                                        <td class="alignright">{{ $item->price }}</td>
-                                                                    </tr>
-                                                                @endforeach
-                                                                <tr class="total">
-                                                                    <td class="alignright" width="80%">Total</td>
-                                                                    <td class="alignright">{{ $total }}</td>
-                                                                </tr>
-                                                        </tbody></table>
-                                                    </td>
-                                                </tr>
-                                            </tbody></table>
-                                        </td>
-                                    </tr>
-                                    <tr>
+    <div class="receipt">
+        <div class="receipt-header">
+            <h1>{{ $order->store->name }}</h1>
+            <p>{{ $order->store->address }}</p>
+            <p>{{ $order->store->phone }}</p>
+            <p>Date: {{ date('m/d/Y', strtotime($order->created_at)) }}</p>
+            <p>Receipt #: {{ $order->id }}</p>
+        </div>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="content-block">
-                                           {{ $order->store->name }}<br> {{ $order->store->address }}<br> {{ $order->store->phone }}
-                                        </td>
-                                    </tr>
-                                </tbody></table>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                    <div class="footer">
-                        <table width="100%">
-                            <tbody><tr>
-                                <td class="aligncenter content-block">Questions? Email <a href="tel:{{ $order->store->phone }}">{{ $order->store->phone }}</a></td>
-                            </tr>
-                        </tbody></table>
-                    </div></div>
-            </td>
-            <td></td>
-        </tr>
-    </tbody></table>
+        <div class="customer-info">
+            <div class="section-title">Customer Info</div>
+            <div class="info-row">
+                <div>Name:</div>
+                <div>{{ $order->customer->name }}</div>
+            </div>
+            <div class="info-row">
+                <div>Email:</div>
+                <div>{{ $order->customer->email }}</div>
+            </div>
+        </div>
+
+        <div class="receipt-body">
+            @php
+                $total = 0;
+                $items = [];
+            @endphp
+            @foreach ($order->carts as $item)
+                @php
+                    $productName = $item->product->name;
+                    if (!isset($items[$productName])) {
+                        $items[$productName] = ['quantity' => 0, 'price' => 0];
+                    }
+                    $items[$productName]['quantity'] += $item->quantity;
+                    $items[$productName]['price'] += $item->price;
+                    $total += $item->price;
+                @endphp
+            @endforeach
+
+            @foreach ($items as $name => $details)
+                <div class="item">
+                    <div class="name">{{ $name }}</div>
+                    <div class="qty">{{ $details['quantity'] }}</div>
+                    <div class="price">${{ number_format($details['price'], 2) }}</div>
+                </div>
+            @endforeach
+            <hr>
+            <div class="total">
+                <div class="name">Total</div>
+                <div class="price">${{ number_format($total, 2) }}</div>
+            </div>
+        </div>
+
+        <div class="payment-info">
+            <div class="section-title">Payment Info</div>
+            <div class="info-row">
+                <div>Payment Method:</div>
+                <div>{{ $order->payment_method }}</div>
+            </div>
+            <div class="info-row">
+                <div>Card Type:</div>
+                <div>{{ $order->card_type }}</div>
+            </div>
+            <div class="info-row">
+                <div>Card Number:</div>
+                <div>**** **** **** {{ substr($order->card_number, -4) }}</div>
+            </div>
+        </div>
+
+        <div class="receipt-footer">
+            <p>Thank you for your business!</p>
+            <p>Visit again soon!</p>
+        </div>
+    </div>
 
 </body>
+
 </html>
