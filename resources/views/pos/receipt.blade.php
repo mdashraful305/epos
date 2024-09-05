@@ -107,80 +107,77 @@
 </head>
 
 <body>
+    <table class="body-wrap">
+        <tbody><tr>
+            <td></td>
+            <td class="container" width="600">
+                <div class="content">
+                    <table class="main" width="100%" cellpadding="0" cellspacing="0">
+                        <tbody><tr>
+                            <td class="content-wrap aligncenter">
+                                <table width="100%" cellpadding="0" cellspacing="0">
+                                    <tbody><tr>
+                                        <td class="content-block">
+                                            <h2>Thanks for using our Shop</h2>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="content-block">
+                                            <table class="invoice">
+                                                <tbody><tr>
+                                                    <td>{{ $order->customer->name }}<br>Invoice #{{ $order->id }}<br>{{ date('d M Y',strtotime($order->created_at)) }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table class="invoice-items" cellpadding="0" cellspacing="0">
 
-    <div class="receipt">
-        <div class="receipt-header">
-            <h1>{{ $order->store->name }}</h1>
-            <p>{{ $order->store->address }}</p>
-            <p>{{ $order->store->phone }}</p>
-            <p>Date: {{ date('m/d/Y', strtotime($order->created_at)) }}</p>
-            <p>Receipt #: {{ $order->id }}</p>
-        </div>
+                                                                <tbody>
+                                                                    @php
+                                                                        $total = 0;
+                                                                    @endphp
+                                                                    @foreach ($order->carts as $item)
+                                                                        @php
+                                                                            $total = $total + ($item->price*$item->quantity);
+                                                                        @endphp
+                                                                        <tr>
+                                                                            <td>{{ $item->product->name }} X {{ $item->quantity }}</td>
+                                                                            <td class="alignright">{{ $item->price*$item->quantity }}</td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                    <tr class="total">
+                                                                        <td class="alignright" width="80%">Total</td>
+                                                                        <td class="alignright">{{ $total }}</td>
+                                                                    </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+                                        </td>
+                                    </tr>
+                                    <tr>
 
-        <div class="customer-info">
-            <div class="section-title">Customer Info</div>
-            <div class="info-row">
-                <div>Name:</div>
-                <div>{{ $order->customer->name }}</div>
-            </div>
-            <div class="info-row">
-                <div>Email:</div>
-                <div>{{ $order->customer->email }}</div>
-            </div>
-        </div>
-
-        <div class="receipt-body">
-            @php
-                $total = 0;
-                $items = [];
-            @endphp
-            @foreach ($order->carts as $item)
-                @php
-                    $productName = $item->product->name;
-                    if (!isset($items[$productName])) {
-                        $items[$productName] = ['quantity' => 0, 'price' => 0];
-                    }
-                    $items[$productName]['quantity'] += $item->quantity;
-                    $items[$productName]['price'] += $item->price;
-                    $total += $item->price;
-                @endphp
-            @endforeach
-
-            @foreach ($items as $name => $details)
-                <div class="item">
-                    <div class="name">{{ $name }}</div>
-                    <div class="qty">{{ $details['quantity'] }}</div>
-                    <div class="price">${{ number_format($details['price'], 2) }}</div>
-                </div>
-            @endforeach
-            <hr>
-            <div class="total">
-                <div class="name">Total</div>
-                <div class="price">${{ number_format($total, 2) }}</div>
-            </div>
-        </div>
-
-        <div class="payment-info">
-            <div class="section-title">Payment Info</div>
-            <div class="info-row">
-                <div>Payment Method:</div>
-                <div>{{ $order->payment_method }}</div>
-            </div>
-            <div class="info-row">
-                <div>Card Type:</div>
-                <div>{{ $order->card_type }}</div>
-            </div>
-            <div class="info-row">
-                <div>Card Number:</div>
-                <div>**** **** **** {{ substr($order->card_number, -4) }}</div>
-            </div>
-        </div>
-
-        <div class="receipt-footer">
-            <p>Thank you for your business!</p>
-            <p>Visit again soon!</p>
-        </div>
-    </div>
+                                    </tr>
+                                    <tr>
+                                        <td class="content-block">
+                                           {{ $order->store->name }}<br> {{ $order->store->address }}<br> {{ $order->store->phone }}
+                                        </td>
+                                    </tr>
+                                </tbody></table>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                    <div class="footer">
+                        <table width="100%">
+                            <tbody><tr>
+                                <td class="aligncenter content-block">Questions? Email <a href="tel:{{ $order->store->phone }}">{{ $order->store->phone }}</a></td>
+                            </tr>
+                        </tbody></table>
+                    </div></div>
+            </td>
+            <td></td>
+        </tr>
+    </tbody></table>
 
 </body>
 

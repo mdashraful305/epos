@@ -94,6 +94,9 @@
             location.reload();
         }, 1000);
     }
+    $('#receipt').on('hidden.bs.modal', function() {
+        location.reload();
+    });
    </script>
      @stack('scripts')
 
