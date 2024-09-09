@@ -39,7 +39,7 @@
             </ul>
             </li>
             <li class="dropdown {{Route::is('suppliers.*') ? 'active' : '' }}">
-                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fa-solid fa-truck-field"></i></i> <span>Suppliers</span></a>
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-truck-field"></i></i> <span>Suppliers</span></a>
                 <ul class="dropdown-menu">
                     @can('index-supplier')
                     <li class="{{ Route::is('suppliers.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('suppliers.index') }}">Suppliers List</a></li>

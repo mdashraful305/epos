@@ -11,10 +11,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"  />
 
    <!-- CSS Libraries -->
-   <link rel="stylesheet" href="{{ asset('backend/assets/modules/jqvmap/dist/jqvmap.min.css')}}">
-   <link rel="stylesheet" href="{{ asset('backend/assets/modules/summernote/summernote-bs4.cs')}}s">
-   <link rel="stylesheet" href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
-   <link rel="stylesheet" href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/jqvmap/dist/jqvmap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/summernote/summernote-bs4.cs')}}s">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css')}}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/izitoast/css/iziToast.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
@@ -85,20 +85,22 @@
    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
    <script>
     function printDiv(elem) {
-        let printContents = document.getElementById('receipt_body').innerHTML;
-        let originalContents = document.body.innerHTML;
-        document.body.innerHTML = printContents;
-        window.print();
-        document.body.innerHTML = originalContents;
-        setTimeout(function() {
-            location.reload();
-        }, 1000);
+        var mywindow = window.open('', 'PRINT', 'height=600,width=350');
+        mywindow.document.write('<html><head><title>' + document.title + '</title>');
+        mywindow.document.write('</head><body>');
+        mywindow.document.write(elem);
+        mywindow.document.write('</body></html>');
+        mywindow.document.close();
+        mywindow.focus();
+        mywindow.onload = function () {
+            mywindow.print();
+            mywindow.onafterprint = function () {
+                mywindow.close();
+            };
+        };
     }
-    $('#receipt').on('hidden.bs.modal', function() {
-        location.reload();
-    });
    </script>
-     @stack('scripts')
+    @stack('scripts')
 
 
 
