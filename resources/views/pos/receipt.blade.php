@@ -107,77 +107,77 @@
 </head>
 
 <body>
-    <table class="body-wrap">
-        <tbody><tr>
-            <td></td>
-            <td class="container" width="600">
-                <div class="content">
-                    <table class="main" width="100%" cellpadding="0" cellspacing="0">
-                        <tbody><tr>
-                            <td class="content-wrap aligncenter">
-                                <table width="100%" cellpadding="0" cellspacing="0">
-                                    <tbody><tr>
-                                        <td class="content-block">
-                                            <h2>Thanks for using our Shop</h2>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="content-block">
-                                            <table class="invoice">
-                                                <tbody><tr>
-                                                    <td>{{ $order->customer->name }}<br>Invoice #{{ $order->id }}<br>{{ date('d M Y',strtotime($order->created_at)) }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table class="invoice-items" cellpadding="0" cellspacing="0">
 
-                                                                <tbody>
-                                                                    @php
-                                                                        $total = 0;
-                                                                    @endphp
-                                                                    @foreach ($order->carts as $item)
-                                                                        @php
-                                                                            $total = $total + ($item->price*$item->quantity);
-                                                                        @endphp
-                                                                        <tr>
-                                                                            <td>{{ $item->product->name }} X {{ $item->quantity }}</td>
-                                                                            <td class="alignright">{{ $item->price*$item->quantity }}</td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                    <tr class="total">
-                                                                        <td class="alignright" width="80%">Total</td>
-                                                                        <td class="alignright">{{ $total }}</td>
-                                                                    </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </tbody></table>
-                                        </td>
-                                    </tr>
-                                    <tr>
+    <div class="receipt">
+        <div class="receipt-header">
+            <h1> {{ $order->store->name }}</h1>
+            <p>{{ $order->store->address }}</p>
+            <p>{{ $order->store->phone }}</p>
+            <p>Date: {{ date('d M Y', strtotime($order->created_at)) }}</p>
+            <p>Receipt #: {{ $order->id }}</p>
+        </div>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="content-block">
-                                           {{ $order->store->name }}<br> {{ $order->store->address }}<br> {{ $order->store->phone }}
-                                        </td>
-                                    </tr>
-                                </tbody></table>
-                            </td>
-                        </tr>
-                    </tbody></table>
-                    <div class="footer">
-                        <table width="100%">
-                            <tbody><tr>
-                                <td class="aligncenter content-block">Questions? Email <a href="tel:{{ $order->store->phone }}">{{ $order->store->phone }}</a></td>
-                            </tr>
-                        </tbody></table>
-                    </div></div>
-            </td>
-            <td></td>
-        </tr>
-    </tbody></table>
+        <div class="customer-info">
+            <div class="section-title">Customer Info</div>
+            <div class="info-row">
+                <div>Name:</div>
+                <div>{{ $order->customer->name }}</div>
+            </div>
+            @isset($order->customer->email)
+                <div class="info-row">
+                    <div>Email:</div>
+                    <div>{{ $order->customer->email }}</div>
+                </div>
+            @endisset
+            @isset($order->customer->phone)
+                <div class="info-row">
+                    <div>Phone:</div>
+                    <div>{{ $order->customer->phone }}</div>
+                </div>
+        </div>
+        @endisset
+        <div class="receipt-body">
+            @php
+                $total = 0;
+            @endphp
+            @foreach ($order->carts as $item)
+                @php
+                    $total = $total + $item->price;
+                @endphp
+                <div class="item">
+                    <div class="name">{{ $item->product->name }}</div>
+                    <div class="qty">{{ $item->quantity }}</div>
+                    <div class="price">{{ $item->price }}</div>
+                </div>
+            @endforeach
+            <hr>
+            <div class="total">
+                <div class="name">Total</div>
+                <div class="price">{{ $total }}</div>
+            </div>
+        </div>
+
+        {{-- <div class="payment-info">
+            <div class="section-title">Payment Info</div>
+            <div class="info-row">
+                <div>Payment Method:</div>
+                <div>Credit Card</div>
+            </div>
+            <div class="info-row">
+                <div>Card Type:</div>
+                <div>VISA</div>
+            </div>
+            <div class="info-row">
+                <div>Card Number:</div>
+                <div>**** **** **** 1234</div>
+            </div>
+        </div> --}}
+
+        <div class="receipt-footer">
+            <p>Thank you for your business!</p>
+            <p>Visit again soon!</p>
+        </div>
+    </div>
 
 </body>
 
