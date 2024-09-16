@@ -1,7 +1,6 @@
 @extends('layouts.back')
 @section('title', 'Profile')
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/assets/modules/select2/dist/css/select2.min.css') }}">
 @endpush
 @section('content')
 @php
@@ -25,7 +24,7 @@
         <div class="col-12 col-md-12 col-lg-5">
           <div class="card profile-widget">
             <div class="profile-widget-header">
-              <img alt="image" src="backend/assets/img/avatar/avatar-1.png" class="rounded-circle profile-widget-picture">
+              <img alt="image" src="{{ asset( Auth::user()->store?->image ?? 'backend/assets/img/avatar/avatar-1.png') }}" class="rounded-circle profile-widget-picture">
             </div>
             <div class="profile-widget-description">
                 <div class="mb-3 row">
@@ -128,7 +127,6 @@
   </section>
 @endsection
 @push('scripts')
-    <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('.select2').select2();

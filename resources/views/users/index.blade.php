@@ -1,12 +1,13 @@
 @extends('layouts.back')
-@section('title', 'Manage Users')
+@section('title') Manage User@endsection
 @section('content')
+
 <section class="section">
     <div class="section-header">
       <h1>Manage User</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-        <div class="breadcrumb-item">Users</div>
+        <div class="breadcrumb-item">User</div>
       </div>
     </div>
     <div class="section-body">
@@ -21,62 +22,23 @@
                 @endcan
               </div>
             </div>
-            <div class="card-body p-0">
+            <div class="card-body ">
               <div class="table-responsive">
-                <table class="table table-striped">
-                  <tr>
-                    <th scope="col">S#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Roles</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                  @forelse ($users as $user)
-                <tr>
-                    <th scope="row">{{ $loop->iteration }}</th>
-                    <td>{{ $user->name }}</td>
-                    <td>{{ $user->email }}</td>
-                    <td>
-                        @forelse ($user->getRoleNames() as $role)
-                            <span class="badge bg-primary text-white">{{ $role }}</span>
-                        @empty
-                        @endforelse
-                    </td>
-                    <td>
-                        <form action="{{ route('users.destroy', $user->id) }}" method="post">
-                            @csrf
-                            @method('DELETE')
-                            @can('show-user')
-                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-warning btn-sm"><i class="bi bi-eye"></i> Show</a>
-                            @endcan
-                            @if (in_array('Super Admin', $user->getRoleNames()->toArray() ?? []) )
-                                @if (Auth::user()->hasRole('Super Admin'))
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
-                                @endif
-                            @else
-                                @can('edit-user')
-                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil-square"></i> Edit</a>
-                                @endcan
+                <table id="data-table" class="table dataTable no-footer table-hover" style="width: 100%">
+                    <thead>
+                      <tr>
+                            <th>S#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                  </table>
 
-                                @can('destroy-user')
-                                    @if (Auth::user()->id!=$user->id)
-                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Do you want to delete this user?');"><i class="bi bi-trash"></i> Delete</button>
-                                    @endif
-                                @endcan
-                            @endif
-
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                    <td colspan="5">
-                        <span class="text-danger">
-                            <strong>No User Found!</strong>
-                        </span>
-                    </td>
-                @endforelse
-                </table>
-                {{ $users->links() }}
               </div>
             </div>
           </div>
@@ -86,3 +48,63 @@
   </section>
 
 @endsection
+@push('scripts')
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+
+        var table = $('#data-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ action('App\Http\Controllers\UserController@index') }}",
+            columns: [
+                {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                {data: 'name', name: 'name'},
+                {data: 'email', name: 'email'},
+                {data: 'roles', name: 'role'},
+                {data: 'created_at', name: 'created_at'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
+
+    });
+
+    function checkDelete(id) {
+        var id =id;
+        var token = $("meta[name='csrf-token']").attr("content");
+        var url="{{ url('/') }}"+'/users/destroy/'+id;
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this data!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    type: "DELETE",
+                    url: url,
+                    data: {
+                        "id": id,
+                        "_token": token,
+                    },
+                    success: function (data) {
+                        if(data.status){
+                            iziToast.success({title: 'Success',timeout: 1500,message: data.message,position: 'topRight'});
+                            $('#data-table').DataTable().ajax.reload();
+                        }else{
+                            iziToast.error({title: 'Error',timeout: 1500,message: data.message,position: 'topRight'});
+                        }
+                    },
+                    error: function(err){
+                        iziToast.error({title: 'Error',timeout: 1500,message: 'Something went wrong. Please try again later',position: 'topRight'});
+                    }
+                });
+            }
+        });
+       };
+
+</script>
+@endpush

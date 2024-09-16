@@ -13,6 +13,7 @@
         "laravel/ui": "^4.4",
         "spatie/laravel-permission": "^6.3",
         "yajra/laravel-datatables-buttons": "*",
+        "yajra/laravel-datatables-export": "*",
         "yajra/laravel-datatables-oracle": "*"
     },
     "require-dev": {

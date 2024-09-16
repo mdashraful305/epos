@@ -1,7 +1,6 @@
 @extends('layouts.back')
-@section('title', 'Edit User')
+@section('title') Manage User @endsection
 @push('styles')
-    <link rel="stylesheet" href="{{ asset('backend/assets/modules/select2/dist/css/select2.min.css') }}">
 @endpush
 @section('content')
 <section class="section">
@@ -9,7 +8,7 @@
       <h1>Manage User</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
-        <div class="breadcrumb-item">users</div>
+        <div class="breadcrumb-item">User</div>
       </div>
     </div>
     <div class="section-body">
@@ -106,6 +105,10 @@
 
 @endsection
 @push('scripts')
-  
 
+<script>
+    $(document).ready(function() {
+        $('.select2').select2();
+    });
+</script>
 @endpush

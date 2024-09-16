@@ -22,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'store_id',
     ];
 
     /**
@@ -47,6 +48,6 @@ class User extends Authenticatable
 
     public function store()
     {
-        return $this->hasOne(Store::class);
+        return $this->hasOne(Store::class, 'id', 'store_id');
     }
 }
