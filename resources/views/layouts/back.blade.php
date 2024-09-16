@@ -22,12 +22,28 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/chocolat/dist/css/chocolat.css') }}">
     <link rel="stylesheet" href="{{ asset('backend/assets/modules/select2/dist/css/select2.min.css') }}">
 
+
   <!-- Template CSS -->
   <link rel="stylesheet" href="{{ asset('backend/assets/css/style.css')}}">
   <link rel="stylesheet" href="{{ asset('backend/assets/css/components.css')}}">
   <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+   <style>
+       @keyframes barWidth {
+            0%   {width: 0%;}
+            25%  {width: 25%;}
+            50%  {width: 50%;}
+            75%  {width: 75%;}
+            100% {width: 100%;}
+        }
 
-
+      .border{
+            border-top: 5px solid #6777ef;
+            display: none;
+            animation: barWidth;
+            animation-duration: 1s;
+            animation-timing-function: linear;
+        }
+   </style>
     @stack('styles')
 
 
@@ -35,6 +51,7 @@
 
 <body @if(Route::is('pos*')) class="sidebar-mini" @endif>
   <div id="app">
+    <div class="border"></div>
     <div class="main-wrapper main-wrapper-1">
         <div class="navbar-bg"></div>
         @include('inc.topbar')
@@ -80,24 +97,38 @@
   <script src="{{ asset('backend/assets/js/scripts.js')}}"></script>
   <script src="{{ asset('backend/assets/js/custom.js')}}"></script>
 
+  <script src="{{asset('backend/assets/js/printThis.js')}}"> </script>
+
   @include('notification.toast')
    <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
    <script>
     function printDiv(elem) {
-        var mywindow = window.open('', 'PRINT', 'height=600,width=350');
-        mywindow.document.write('<html><head><title>' + document.title + '</title>');
-        mywindow.document.write('</head><body>');
-        mywindow.document.write(elem);
-        mywindow.document.write('</body></html>');
-        mywindow.document.close();
-        mywindow.focus();
-        mywindow.onload = function () {
-            mywindow.print();
-            mywindow.onafterprint = function () {
-                mywindow.close();
-            };
-        };
+        $('.border').show();
+        $(elem).printThis({
+            beforePrintEvent: function(){
+                console.log('beforePrint');
+            },
+        });
+    }
+
+    function printReceipt(id) {
+        $.ajax({
+            type: "POST",
+            url: "{{ route('orders.receipt') }}",
+            data: {id: id,
+                _token:"{{ csrf_token() }}"
+            },
+            dataType: "json",
+            success: function (response) {
+                if(response.status){
+                    printDiv(response.receipt);
+
+                } else {
+                    iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
+                }
+            }
+        });
     }
    </script>
     @stack('scripts')
