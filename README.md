@@ -1,107 +1,98 @@
-# Epos
 
-Laravel Multi Authentication
+# EPOS 
 
-## Introduction
+## Overview
 
-This project utilizes the Stisla admin template and the Spatie permission package to create a robust and user-friendly web application. Stisla provides a sleek and modern interface for the admin dashboard, while Spatie permission package offers a convenient way to manage user roles and permissions within the application.
+EPOS (Electronic Point of Sale) is a comprehensive solution designed to streamline retail operations. This system provides features for managing sales, inventory, and customer data, facilitating a smooth and efficient checkout process. Built with a focus on usability and performance, EPOS is ideal for businesses looking to modernize their sales operations.
 
 ## Features
 
-- **Stisla Admin Template**: Utilize the modern and responsive Stisla admin template to create a visually appealing and intuitive dashboard interface.
+- **Sales Management:** Process transactions quickly and efficiently.
+- **Inventory Control:** Track stock levels, manage reordering, and view inventory reports.
+- **Customer Management:** Store and retrieve customer information, track purchase history.
+- **Reports:** Generate detailed sales and inventory reports for better decision-making.
+- **User Management:** Different access levels for staff and managers.
 
-- **Spatie Permission Package Integration**: Seamlessly integrate the Spatie permission package to manage user roles and permissions efficiently.
+## Technologies Used
 
-- **User Management**: Easily manage user accounts, roles, and permissions through the provided interface.
-
-- **Role-Based Access Control (RBAC)**: Implement role-based access control to restrict access to certain features or sections of the application based on user roles.
-
-- **Customization**: Extend and customize the functionality of the application according to specific project requirements.
+- **Frontend:** HTML,CSS,Bootstrap
+- **Backend:** PHP,Laravel
+- **Database:** MySQL
 
 ## Installation
 
-1. Clone the repository:
+To get started with EPOS, follow these steps:
 
-```bash
-https://github.com/mdashraful305/laravel-multiauth.git
-```
+1. **Clone the Repository**
 
-2. Navigate to the project directory:
+   ```bash
+   git clone https://github.com/mdashraful305/epos.git
+   ```
 
-```bash
-cd laravel-multiauth
-```
+2. **Navigate to the Project Directory**
 
-3. Install dependencies using Composer:
+   ```bash
+   cd epos
+   ```
 
-```bash
-composer install
-```
+3. **Install Dependencies**
 
-4. Set up your environment variables by copying the `.env.example` file to `.env`:
+   For the frontend:
 
-```bash
-cp .env.example .env
-```
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-5. Generate a new application key:
+4. **Configure Environment Variables**
 
-```bash
-php artisan key:generate
-```
+   Create a `.env` file in the root directory and add the necessary environment variables:
 
-6. Configure your database settings in the `.env` file:
+   ```plaintext
+   DB_HOST=your_database_host
+   DB_USER=your_database_user
+   DB_PASS=your_database_password
+   ```
 
-```
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=your_database
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
-
-7. Migrate the database:
-
-```bash
-php artisan migrate
-```
-
-8. Seed the database with initial data:
-
-```bash
-php artisan db:seed
-```
+5. **Run the Application**
+ 
+   ```bash
+   php artisan serve
+   ```
 
 ## Usage
 
-1. Start the development server:
+1. **Start the Application**
 
-```bash
-php artisan serve
-```
+   Launch backend services to start the EPOS system.
 
-2. Access the application in your web browser at `http://localhost:8000`.
+2. **Access the Application**
 
-3. Log in with the default credentials:
+   Open your web browser and go to `http://localhost:8000` (or the port specified in your configuration).
 
-To access the application after installation, you can use the following default credentials for the predefined user roles:
+3. **Login**
 
-- **Super Admin**:
-  - **Email:** super@admin.com
-  - **Password:** 123456
+   Use the credentials set up in the environment variables or default credentials provided.
 
-- **Admin**:
-  - **Email:** admin@admin.com
-  - **Password:** 123456
+ 4. **Explore Features**
 
-These credentials can be used to log in to the application and access the admin dashboard. It is recommended to change these default passwords and user details after the initial setup for security reasons.
+   - **Sales:** Process transactions and view sales reports.
+   - **Inventory:** Add, update, and track inventory items.
+   - **Customers:** Manage customer profiles and view their purchase history.
 
-## Credits
+## Contributing
 
-- Stisla Admin Template: [https://getstisla.com](https://getstisla.com)
-- Spatie Permission Package: [https://spatie.be/docs/laravel-permission](https://spatie.be/docs/laravel-permission)
+We welcome contributions to enhance the EPOS project. To contribute:
+
+    1. Fork the repository.
+    2. Create a new branch for your feature or fix.
+    3. Commit your changes and push to your fork.
+    4. Submit a pull request with a detailed description of your changes.
 
 ## License
 
-This project is open-source and licensed under the [MIT License](https://opensource.org/license/mit/).
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+For any questions or feedback, open an issue on the GitHub repository.
