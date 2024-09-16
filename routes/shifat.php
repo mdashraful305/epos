@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\PosController;
-use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\EmployeeController;
 
 
 Route::group(['as'=> 'pos.', 'prefix' => 'pos'],function (){
@@ -33,4 +34,8 @@ Route::group(['as'=>'employees.', 'prefix'=>'employees'],function(){
 
 });
 
+
 Route::delete('users/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+
+
+Route::get('reports', [HomeController::class, 'reportIndex'])->name('reports.index');

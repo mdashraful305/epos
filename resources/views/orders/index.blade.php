@@ -107,24 +107,7 @@
         });
     }
 
-    function printReceipt(id) {
-        $.ajax({
-            type: "POST",
-            url: "{{ route('orders.receipt') }}",
-            data: {id: id,
-                _token:"{{ csrf_token() }}"
-            },
-            dataType: "json",
-            success: function (response) {
-                if(response.status){
-                    printDiv(response.receipt);
 
-                } else {
-                    iziToast.error({title: 'Error',timeout: 1500,message: response.message,position: 'topRight'});
-                }
-            }
-        });
-    }
 
 </script>
 @endpush

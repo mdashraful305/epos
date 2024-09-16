@@ -146,6 +146,6 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         Route::delete('destroy/{id}', [SupplierController::class, 'destroy'])->name('destroy');
     });
 
-
+    
 
 });

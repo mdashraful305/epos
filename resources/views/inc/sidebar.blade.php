@@ -86,6 +86,17 @@
             </ul>
             </li>
         @endcan
+        @can('index-report')
+            <li class="menu-header">Report Management</li>
+            <li class="dropdown {{Route::is('reports.*') ? 'active' : '' }}">
+            <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-chart-line"></i> <span>Report</span></a>
+            <ul class="dropdown-menu">
+                @can('index-report')
+                <li class="{{ Route::is('reports.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('reports.index') }}">Report List</a></li>
+                @endcan
+            </ul>
+            </li>
+        @endcan
         @can(['index-employee'])
         <li class="menu-header">Employee Management</li>
         <li class="dropdown {{ Route::is('employees.*')? 'active' : '' }}">
