@@ -37,5 +37,6 @@ Route::group(['as'=>'employees.', 'prefix'=>'employees'],function(){
 
 Route::delete('users/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
-
 Route::get('reports', [HomeController::class, 'reportIndex'])->name('reports.index');
+Route::get('reports/orders', [HomeController::class, 'reportOrders'])->name('reports.orders');
+Route::get('reports/customer', [HomeController::class, 'reportCustomer'])->name('reports.customers');

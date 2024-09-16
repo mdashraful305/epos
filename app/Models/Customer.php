@@ -18,4 +18,9 @@ class Customer extends Model
         'slug',
         'store_id'
     ];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

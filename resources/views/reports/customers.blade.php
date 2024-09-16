@@ -1,9 +1,9 @@
 @extends('layouts.back')
-@section('title', 'Reports')
+@section('title', 'Customers Reports')
 @section('content')
 <section class="section">
     <div class="section-header">
-      <h1>Reports</h1>
+      <h1>Customers Reports</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
         <div class="breadcrumb-item">Reports</div>
@@ -42,10 +42,9 @@
                       <thead>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
+                            <th>Customer Name</th>
+                            <th>Profit</th>
                             <th>Total Amount</th>
-                            <th>Expense</th>
-                            <th>Profit/Loss</th>
                             <th>Total Orders</th>
                         </tr>
                         </tr>
@@ -56,7 +55,6 @@
                         <tr>
                             <th></th>
                             <th>Total  : </th>
-                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -85,7 +83,7 @@
             bAutoWidth:false,
             dom:'lBfrtip',
             ajax: {
-                url: '{{ route('reports.index') }}',
+                url: '{{ route('reports.customers') }}',
                 data: function (d) {
                     d.start_date = $('#start_date').val();
                     d.end_date = $('#end_date').val();
@@ -93,10 +91,9 @@
             },
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'date', name: 'date' },
+                { data: 'customer_name', name: 'customer_name' },
+                { data: 'total_profit', name: 'total_profit' },
                 { data: 'total_amount', name: 'total_amount' },
-                { data: 'expense', name: 'expense' },
-                { data: 'profit', name: 'profit' },
                 { data: 'total_orders', name: 'total_orders' },
            ],
               "footerCallback": function ( row, data, start, end, display ) {
@@ -113,11 +110,8 @@
                  $total_amount = api.column(3).data().reduce( function (a, b) {
                       return intVal(a) + intVal(b);
                     }, 0 );
-                $profit = total_profit - $total_amount;
-
                     $( api.column(2).footer() ).html(total_profit);
                     $( api.column(3).footer() ).html($total_amount);
-                    $( api.column(4).footer() ).html($profit);
                 },
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 

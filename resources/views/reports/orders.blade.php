@@ -1,9 +1,9 @@
 @extends('layouts.back')
-@section('title', 'Reports')
+@section('title', 'Orders Reports')
 @section('content')
 <section class="section">
     <div class="section-header">
-      <h1>Reports</h1>
+      <h1>Orders Reports</h1>
       <div class="section-header-breadcrumb">
         <div class="breadcrumb-item active"><a href="{{ route('dashboard') }}">Dashboard</a></div>
         <div class="breadcrumb-item">Reports</div>
@@ -42,11 +42,14 @@
                       <thead>
                         <tr>
                             <th>#</th>
-                            <th>Date</th>
+                            <th>Order No</th>
+                            <th>Customer Name</th>
+                            <th>Sub Total</th>
+                            <th>Shipping Cost</th>
+                            <th>Tax</th>
+                            <th>Discount</th>
+                            <th>Profit</th>
                             <th>Total Amount</th>
-                            <th>Expense</th>
-                            <th>Profit/Loss</th>
-                            <th>Total Orders</th>
                         </tr>
                         </tr>
                       </thead>
@@ -55,11 +58,15 @@
                       <tfoot class="bg-secondary">
                         <tr>
                             <th></th>
-                            <th>Total  : </th>
+                            <th></th>
+                            <th>Total : </th>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
+                            <th></th>
+
                         </tr>
                       </tfoot>
                     </table>
@@ -85,7 +92,7 @@
             bAutoWidth:false,
             dom:'lBfrtip',
             ajax: {
-                url: '{{ route('reports.index') }}',
+                url: '{{ route('reports.orders') }}',
                 data: function (d) {
                     d.start_date = $('#start_date').val();
                     d.end_date = $('#end_date').val();
@@ -93,11 +100,14 @@
             },
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'date', name: 'date' },
-                { data: 'total_amount', name: 'total_amount' },
-                { data: 'expense', name: 'expense' },
+                { data: 'order_id', name: 'order_id' },
+                { data: 'customer_name', name: 'customer_name' },
+                { data: 'sub_total', name: 'sub_total' },
+                { data: 'shipping_cost', name: 'shipping_cost' },
+                { data: 'tax', name: 'tax' },
+                { data: 'discount', name: 'discount' },
                 { data: 'profit', name: 'profit' },
-                { data: 'total_orders', name: 'total_orders' },
+                { data: 'total_amount', name: 'total_amount' },
            ],
               "footerCallback": function ( row, data, start, end, display ) {
                  var api = this.api(), data;
@@ -107,17 +117,32 @@
                             typeof i === 'number' ?
                              i : 0;
                  };
-                 total_profit = api.column(2).data().reduce( function (a, b) {
+                 total_sub = api.column(3).data().reduce( function (a, b) {
                       return intVal(a) + intVal(b);
                  }, 0 );
-                 $total_amount = api.column(3).data().reduce( function (a, b) {
+                 $total_shipping = api.column(4).data().reduce( function (a, b) {
                       return intVal(a) + intVal(b);
                     }, 0 );
-                $profit = total_profit - $total_amount;
+                $total_tax = api.column(5).data().reduce( function (a, b) {
+                      return intVal(a) + intVal(b);
+                    }, 0 );
+                $total_discount = api.column(6).data().reduce( function (a, b) {
+                      return intVal(a) + intVal(b);
+                    }, 0 );
+                $total_profit = api.column(7).data().reduce( function (a, b) {
+                      return intVal(a) + intVal(b);
+                    }, 0 );
+                $total_amount = api.column(8).data().reduce( function (a, b) {
+                      return intVal(a) + intVal(b);
+                    }, 0 );
 
-                    $( api.column(2).footer() ).html(total_profit);
-                    $( api.column(3).footer() ).html($total_amount);
-                    $( api.column(4).footer() ).html($profit);
+                    $( api.column(3).footer() ).html(total_sub);
+                    $( api.column(4).footer() ).html($total_shipping);
+                    $( api.column(5).footer() ).html($total_tax);
+                    $( api.column(6).footer() ).html($total_discount);
+                    $( api.column(7).footer() ).html($total_profit);
+                    $( api.column(8).footer() ).html($total_amount);
+
                 },
                 "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
 
