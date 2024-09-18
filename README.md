@@ -5,6 +5,8 @@
 
 EPOS (Electronic Point of Sale) is a comprehensive solution designed to streamline retail operations. This system provides features for managing sales, inventory, and customer data, facilitating a smooth and efficient checkout process. Built with a focus on usability and performance, EPOS is ideal for businesses looking to modernize their sales operations.
 
+![EPOS System](public/pos.png)
+
 ## Features
 
 - **Sales Management:** Process transactions quickly and efficiently.
