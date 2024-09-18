@@ -28,7 +28,7 @@ use App\Http\Controllers\SubCategoryController;
 |
 */
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 Route::get('/home', function () {
     return redirect()->route('dashboard');

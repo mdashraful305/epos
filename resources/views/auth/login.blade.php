@@ -60,7 +60,7 @@
             Don't have an account? <a href="{{ route('register') }}">Create One</a>
           </div>
           <div class="simple-footer">
-            Copyright &copy; Stisla 2018
+            Copyright &copy; DevsArtisan 2018
           </div>
         </div>
       </div>

@@ -62,8 +62,11 @@
               </form>
             </div>
           </div>
+          <div class="mt-5 text-muted text-center">
+            Have already an account?  <a href="{{ route('login') }}">Login here</a>
+          </div>
           <div class="simple-footer">
-            Copyright &copy; Stisla 2018
+            Copyright &copy; DevsArtisan 2018
           </div>
         </div>
       </div>
