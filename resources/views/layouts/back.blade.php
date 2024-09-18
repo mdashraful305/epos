@@ -98,11 +98,78 @@
   <script src="{{ asset('backend/assets/js/custom.js')}}"></script>
 
   <script src="{{asset('backend/assets/js/printThis.js')}}"> </script>
+  @php
+    $data = App\Models\Order::where('store_id', Auth::user()->store_id)
+        ->whereBetween('created_at',  [\Carbon\Carbon::now()->startOfWeek(\Carbon\Carbon::SUNDAY), \Carbon\Carbon::now()->endOfWeek(\Carbon\Carbon::SATURDAY)])
+        ->selectRaw('sum(total_amount) as total_amount, created_at')
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->get();
 
+    $expenses = App\Models\Expense::where('store_id', Auth::user()->store_id)
+        ->whereBetween('created_at',  [\Carbon\Carbon::now()->startOfWeek(\Carbon\Carbon::SUNDAY), \Carbon\Carbon::now()->endOfWeek(\Carbon\Carbon::SATURDAY)])
+        ->selectRaw('sum(expense_amount) as expense_amount, created_at')
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->get();
+
+    $days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    $total = [];
+    $expense = [];
+    foreach ($data as $key => $value) {
+        $total[] = $value->total_amount;
+    }
+    foreach ($expenses as $key => $value) {
+        $expense[] = $value->expense_amount;
+    }
+  @endphp
   @include('notification.toast')
    <script src="{{ asset('backend/assets/modules/select2/dist/js/select2.full.min.js') }}"></script>
    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
    <script>
+    // ChartJS
+    var statistics_chart = document.getElementById("myChart").getContext('2d');
+
+    var myChart = new Chart(statistics_chart, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($days) !!},
+        datasets: [
+            {
+                label: 'Orders',
+                data: {!! json_encode($total) !!},
+                borderWidth: 3,
+                borderColor: '#6777ef',
+                backgroundColor: 'transparent',
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#6777ef',
+                pointRadius: 2,
+            },
+            {
+                label: 'Expense',
+                data: {!! json_encode($expense) !!},
+                borderWidth: 3,
+                borderColor: '#fc544b',
+                backgroundColor: 'transparent',
+                pointBackgroundColor: '#fff',
+                pointBorderColor: '#fc544b',
+                pointRadius: 2,
+            },
+
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+    });
+
+
     function printDiv(elem) {
         $('.border').show();
         $(elem).printThis({
