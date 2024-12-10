@@ -38,6 +38,7 @@
                 @endcan
             </ul>
             </li>
+            
             <li class="dropdown {{Route::is('suppliers.*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-truck-field"></i></i> <span>Suppliers</span></a>
                 <ul class="dropdown-menu">

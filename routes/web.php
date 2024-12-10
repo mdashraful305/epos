@@ -43,10 +43,12 @@ Route::get('/clear', function () {
 
     return redirect()->back()->withSuccess('Cache cleared successfully.');
 })->name('clear');
+
 Route::get('/route', function () {
     Artisan::call('permission:create-permission-routes');
     return redirect()->back()->withSuccess('Cache cleared successfully.');
 })->name('route');
+
 Auth::routes();
 Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'permission']], function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
