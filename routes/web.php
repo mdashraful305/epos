@@ -35,15 +35,17 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/clear', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('config:clear');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
-    Artisan::call('optimize:clear');
+// Route::get('/clear', function () {
+//     Artisan::call('cache:clear');
+//     Artisan::call('config:clear');
+//     Artisan::call('view:clear');
+//     Artisan::call('route:clear');
+//     Artisan::call('optimize:clear');
 
-    return redirect()->back()->withSuccess('Cache cleared successfully.');
-})->name('clear');
+//     return redirect()->back()->withSuccess('Cache cleared successfully.');
+// })->name('clear');`
+
+
 Route::get('/route', function () {
     Artisan::call('permission:create-permission-routes');
     return redirect()->back()->withSuccess('Cache cleared successfully.');
@@ -146,6 +148,6 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         Route::delete('destroy/{id}', [SupplierController::class, 'destroy'])->name('destroy');
     });
 
-    
+
 
 });
