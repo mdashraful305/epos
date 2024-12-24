@@ -14,6 +14,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SubCategoryController;
@@ -34,15 +35,17 @@ Route::get('/home', function () {
     return redirect()->route('dashboard');
 });
 
-Route::get('/clear', function () {
-    Artisan::call('cache:clear');
-    Artisan::call('config:clear');
-    Artisan::call('view:clear');
-    Artisan::call('route:clear');
-    Artisan::call('optimize:clear');
+// Route::get('/clear', function () {
+//     Artisan::call('cache:clear');
+//     Artisan::call('config:clear');
+//     Artisan::call('view:clear');
+//     Artisan::call('route:clear');
+//     Artisan::call('optimize:clear');
 
-    return redirect()->back()->withSuccess('Cache cleared successfully.');
-})->name('clear');
+//     return redirect()->back()->withSuccess('Cache cleared successfully.');
+// })->name('clear');
+
+
 Route::get('/route', function () {
     Artisan::call('permission:create-permission-routes');
     return redirect()->back()->withSuccess('Cache cleared successfully.');

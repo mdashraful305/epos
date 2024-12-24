@@ -141,7 +141,7 @@ $total_expense=App\Models\Expense::where('store_id', Auth::user()->store_id)->su
                     <li class="media">
                         <div class="media-body">
                         <div class="float-right text-primary">{{ $item->created_at->diffForHumans();}}</div>
-                        <div class="media-title">#{{$item->id }} - By {{ $item->customer->name }}</div>
+                        <div class="media-title">Order No #{{$item->id }} - By {{ $item->customer->name }}</div>
                         <span class="text-small text-muted">Price : {{ $item->total_amount }}</span>
                         </div>
                     </li>
