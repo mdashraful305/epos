@@ -8,18 +8,16 @@
       </div>
       <ul class="sidebar-menu">
         <li class="menu-header">Dashboard</li>
-        <li class="dropdown {{ Route::is('dashboard')  ? 'active' : '' }}">
-          <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Dashboard</span></a>
-          <ul class="dropdown-menu">
-            <li><a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a></li>
-          </ul>
+
+        <li class="{{ Route::is('dashboard')  ? 'active' : '' }}">
+            <a class="nav-link {{ Route::is('dashboard')  ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
         </li>
-        @can(['index-order'])
-        <li>
+        @canany(['index-order'])
+        <li  class="{{ Route::is('orders.*')  ? 'active' : '' }}">
             <a class="nav-link {{ Route::is('orders.index')  ? 'active' : '' }}" href="{{ route('orders.index') }}"><i class="fas fa-shopping-basket"></i> <span>Order List</span></a>
         </li>
-        @endcan
-        @can(['index-categorie', 'index-categorie', 'index-product', 'index-supplier'])
+        @endcanany
+        @canany(['index-categorie', 'index-categorie', 'index-product', 'index-supplier'])
             <li class="menu-header">Product Management</li>
             <li class="dropdown {{Route::is('products.*') || Route::is('categories.*') ||  Route::is('subcategories.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-box"></i> <span>Product</span></a>
@@ -38,6 +36,7 @@
                 @endcan
             </ul>
             </li>
+            
             <li class="dropdown {{Route::is('suppliers.*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-truck-field"></i></i> <span>Suppliers</span></a>
                 <ul class="dropdown-menu">
@@ -46,14 +45,14 @@
                     @endcan
                 </ul>
                 </li>
-        @endcan
+        @endcanany
 
-        @can(['index-categorie'])
+        @canany(['index-store', 'show-store'])
             <li class="menu-header">Store Management</li>
             <li class="dropdown {{Route::is('stores.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-store"></i> <span>Store</span></a>
             <ul class="dropdown-menu">
-                @can('index-categorie')
+                @can('index-store')
                 <li class="{{ Route::is('stores.index')  ? 'active' : '' }}"><a class="nav-link" href="{{ route('stores.index') }}">Store List</a></li>
                 @endcan
                 @can('show-store')
@@ -63,8 +62,8 @@
                 @endcan
             </ul>
             </li>
-        @endcan
-        @can(['index-customer'])
+        @endcanany
+        @canany(['index-customer'])
             <li class="menu-header">Customer Management</li>
             <li class="dropdown {{Route::is('customers.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i> <span>Customer</span></a>
@@ -74,7 +73,7 @@
                 @endcan
             </ul>
             </li>
-        @endcan
+        @endcanany
         @can('index-expense')
             <li class="menu-header">Payroll  Management</li>
             <li class="dropdown {{Route::is('expenses.*') ? 'active' : '' }}">
@@ -86,7 +85,7 @@
             </ul>
             </li>
         @endcan
-        @can(['index-report','orders-report','customers-report'])
+        @canany(['index-report','orders-report','customers-report'])
             <li class="menu-header">Report Management</li>
             <li class="dropdown {{Route::is('reports.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-chart-line"></i> <span>Report</span></a>
@@ -103,8 +102,8 @@
 
             </ul>
             </li>
-        @endcan
-        @can(['index-employee'])
+        @endcanany
+        @canany(['index-employee'])
         <li class="menu-header">Employee Management</li>
         <li class="dropdown {{ Route::is('employees.*')? 'active' : '' }}">
         <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="far fa-user"></i> <span>Employee</span></a>
@@ -114,8 +113,8 @@
             @endcan
         </ul>
         </li>
-    @endcan
-        @can(['index-user', 'index-role', 'index-permission'])
+        @endcanany
+        @canany(['index-user', 'index-role', 'index-permission'])
             <li class="menu-header">User Management</li>
             <li class="dropdown {{ Route::is('users.*') || Route::is('roles.*')||Route::is('permissions.*') ? 'active' : '' }}">
             <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="far fa-user"></i> <span>User</span></a>
@@ -131,6 +130,6 @@
                 @endcan
             </ul>
             </li>
-        @endcan
+            @endcanany
     </aside>
 </div>

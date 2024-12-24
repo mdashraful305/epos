@@ -14,6 +14,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\SubCategoryController;
@@ -27,7 +28,6 @@ use App\Http\Controllers\SubCategoryController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-include('shifat.php');
 Route::get('/', function () {
     return view('welcome');
 });
@@ -43,7 +43,6 @@ Route::get('/home', function () {
 //     Artisan::call('optimize:clear');
 
 //     return redirect()->back()->withSuccess('Cache cleared successfully.');
-// })->name('clear');`
 
 
 Route::get('/route', function () {
@@ -54,13 +53,14 @@ Auth::routes();
 Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'permission']], function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
     Route::get('/profile', [HomeController::class, 'profile'])->name('users.profile');
-    include('shifat.php');
+
 
     Route::resources([
         'roles' => RoleController::class,
         'users' => UserController::class,
         'permissions' => PermissionController::class,
     ]);
+    Route::delete('users/destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
     //catagoey
     Route::group(['as'=> 'categories.', 'prefix' => 'categories'],function (){
@@ -147,7 +147,6 @@ Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => ['auth', 'p
         Route::post('update/{id}', [SupplierController::class, 'update'])->name('update');
         Route::delete('destroy/{id}', [SupplierController::class, 'destroy'])->name('destroy');
     });
-
 
 
 });
